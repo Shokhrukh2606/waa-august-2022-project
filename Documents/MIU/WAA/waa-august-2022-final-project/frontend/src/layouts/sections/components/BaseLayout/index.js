@@ -30,19 +30,21 @@ import CenteredFooter from "examples/Footers/CenteredFooter";
 import Breadcrumbs from "examples/Breadcrumbs";
 
 // Routes
-import routes from "routes";
+import routes from "admin-routes";
+import { useAuth } from "hooks/useAuth";
 
 function BaseLayout({ breadcrumb, title, children }) {
+  const { loggedIn } = useAuth()
   return (
     <MKBox display="flex" flexDirection="column" bgColor="white" minHeight="100vh">
       <MKBox bgColor="white" shadow="sm" py={0.25}>
         <DefaultNavbar
           routes={routes}
           action={{
-            route: "/authentication/sign-in",
+            route: loggedIn ? "/authentication/sign-out" : "/authentication/sign-in",
             type: "internal",
-            label: "Login",
-            color: "info",
+            label: loggedIn ? "Logout" : "Login",
+            color: loggedIn ? "error" : "info",
           }}
           transparent
           relative

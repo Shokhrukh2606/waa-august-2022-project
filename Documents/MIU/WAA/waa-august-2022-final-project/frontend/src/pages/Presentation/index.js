@@ -45,6 +45,7 @@ import footerRoutes from "footer.routes";
 
 // Images
 import bgImage from "assets/images/bg-presentation.jpg";
+import MKAlert from "components/MKAlert";
 
 function Presentation() {
   return (
@@ -70,6 +71,7 @@ function Presentation() {
           placeItems: "center",
         }}
       >
+        <MKAlert dismissible color="primary">This is an alert!</MKAlert>
         <Container>
           <Grid container item xs={12} lg={7} justifyContent="center" mx="auto">
             <MKTypography
