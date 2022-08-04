@@ -33,6 +33,7 @@ import student_routes from "student-routes";
 import faculty_routes from "faculty-routes";
 import DefaultLayout from "layouts/admin";
 import SignOut from "pages/LandingPages/SignOut";
+import SignUpBasic from "pages/LandingPages/SignUp";
 
 export default function App() {
   const { pathname } = useLocation();
@@ -74,6 +75,7 @@ export default function App() {
           {getRoutes(student_routes)}
         </Route>
         <Route path="/authentication/sign-out" element={<SignOut />} />
+        <Route path="/authentication/sign-up" element={<SignUpBasic />} />
         <Route path="*" element={<Navigate to="/presentation" />} />
       </Routes>
     </ThemeProvider>
