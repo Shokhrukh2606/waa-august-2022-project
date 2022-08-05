@@ -1,0 +1,86 @@
+version: "3.8"
+services:
+  client:
+    image: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./frontend/build:/usr/share/nginx/html
+    depends_on:
+      - app
+      # - keycloak
+
+  app:
+    build:
+      context: .
+    platform: linux/x86_64
+    volumes:
+      - ./Upload:/Upload
+
+    environment:
+      #Database Connection
+      SPRING_DATASOURCE_DRIVE_CLASS_NAME: "org.postgresql.Driver"
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:8880/waa-app"
+      SPRING_DATASOURCE_USERNAME: "postgres"
+      SPRING_DATASOURCE_PASSWORD: "Admin@1234"
+
+      #JPA Config
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: "org.hibernate.dialect.PostgreSQLDialect"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+  db:
+    image: "postgres:13.1-alpine"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Admin@1234"
+      PGPORT: "8880"
+      POSTGRES_DB: "waa-app"
+    ports:
+      - "8880:8880"
+    volumes:
+      - ./app-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  postgres:
+    image: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U keycloak" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Pa55w0rd
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    ports:
+      - 8081:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  postgres-data:
+  upload-data:
