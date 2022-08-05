@@ -13,10 +13,10 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -44,25 +44,28 @@ import routes from "routes";
 
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
+import { useAuth } from "hooks/useAuth";
 
 function SignInBasic() {
   const [rememberMe, setRememberMe] = useState(false);
-
+  const navigate = useNavigate()
+  const [authData, setAuthData] = useState({ email: "", password: "" })
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
-
+  const { login, loggedIn } = useAuth()
+  const onChange = e => setAuthData({ ...authData, [e.target.name]: e.target.value })
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    await login(authData).then(() => {
+      navigate("/admin")
+    })
+  }
+  useEffect(() => {
+    if (loggedIn) {
+      console.log("User data fetch")
+    }
+  }, [loggedIn]);
   return (
     <>
-      <DefaultNavbar
-        routes={routes}
-        action={{
-          route: "/authentication/sign-in",
-          type: "internal",
-          label: "Login",
-          color: "info",
-        }}
-        transparent
-        light
-      />
       <MKBox
         position="absolute"
         top={0}
@@ -81,6 +84,7 @@ function SignInBasic() {
           backgroundRepeat: "no-repeat",
         }}
       />
+
       <MKBox px={1} width="100%" height="100vh" mx="auto" position="relative" zIndex={2}>
         <Grid container spacing={1} justifyContent="center" alignItems="center" height="100%">
           <Grid item xs={11} sm={9} md={5} lg={4} xl={3}>
@@ -120,10 +124,10 @@ function SignInBasic() {
               <MKBox pt={4} pb={3} px={3}>
                 <MKBox component="form" role="form">
                   <MKBox mb={2}>
-                    <MKInput type="email" label="Email" fullWidth />
+                    <MKInput name="email" onChange={onChange} type="email" label="Email" fullWidth />
                   </MKBox>
                   <MKBox mb={2}>
-                    <MKInput type="password" label="Password" fullWidth />
+                    <MKInput name="password" onChange={onChange} type="password" label="Password" fullWidth />
                   </MKBox>
                   <MKBox display="flex" alignItems="center" ml={-1}>
                     <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -138,7 +142,7 @@ function SignInBasic() {
                     </MKTypography>
                   </MKBox>
                   <MKBox mt={4} mb={1}>
-                    <MKButton variant="gradient" color="info" fullWidth>
+                    <MKButton onClick={onSubmit} variant="gradient" color="info" fullWidth>
                       sign in
                     </MKButton>
                   </MKBox>

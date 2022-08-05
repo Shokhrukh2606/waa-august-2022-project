@@ -28,6 +28,11 @@ import Presentation from "layouts/pages/presentation";
 
 // Material Kit 2 React routes
 import routes from "routes";
+import admin_routes from "admin-routes";
+import student_routes from "student-routes";
+import faculty_routes from "faculty-routes";
+import DefaultLayout from "layouts/admin";
+import SignOut from "pages/LandingPages/SignOut";
 
 export default function App() {
   const { pathname } = useLocation();
@@ -44,8 +49,10 @@ export default function App() {
         return getRoutes(route.collapse);
       }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
+      if (route.index) {
+        return <Route index element={route.component} key={route.name} />;
+      } else if (route.route) {
+        return <Route path={route.route} element={route.component} key={route.name} />;
       }
 
       return null;
@@ -57,6 +64,16 @@ export default function App() {
       <Routes>
         {getRoutes(routes)}
         <Route path="/presentation" element={<Presentation />} />
+        <Route path="/admin" element={<DefaultLayout />}>
+          {getRoutes(admin_routes)}
+        </Route>
+        <Route path="/faculty" element={<DefaultLayout />}>
+          {getRoutes(faculty_routes)}
+        </Route>
+        <Route path="/student" element={<DefaultLayout />}>
+          {getRoutes(student_routes)}
+        </Route>
+        <Route path="/authentication/sign-out" element={<SignOut />} />
         <Route path="*" element={<Navigate to="/presentation" />} />
       </Routes>
     </ThemeProvider>
