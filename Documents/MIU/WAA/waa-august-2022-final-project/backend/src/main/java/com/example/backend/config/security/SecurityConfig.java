@@ -22,11 +22,15 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
 @Import(KeycloakSpringBootConfigResolver.class)
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
+    private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/v2/api-docs/**", "/swagger.json",
+            "/swagger-ui.html", "/webjars/**"};
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/resource/uploads").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/resource/uploads/**").permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated();
     }
 

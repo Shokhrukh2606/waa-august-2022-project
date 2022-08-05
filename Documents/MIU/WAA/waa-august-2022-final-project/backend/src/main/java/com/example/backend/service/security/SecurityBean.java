@@ -4,6 +4,7 @@ import com.example.backend.domain.user.LocalUser;
 import com.example.backend.exceptions.ErrorCode;
 import com.example.backend.repo.user.UserRepo;
 import lombok.AllArgsConstructor;
+import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,9 @@ public class SecurityBean implements Security {
             throw new UsernameNotFoundException("Should be authenticated");
         }
 
-        return loadUserByUsername(authentication.getName());
+        var context = (RefreshableKeycloakSecurityContext) authentication.getCredentials();
+
+        return loadUserByUsername(context.getToken().getEmail());
     }
 
     public LocalUser loadUserByUsername(String username) throws UsernameNotFoundException {

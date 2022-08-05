@@ -2,6 +2,7 @@ package com.example.backend.service.job;
 
 import com.example.backend.domain.job.JobAdvertisement;
 import com.example.backend.domain.job.Tag;
+import com.example.backend.dto.filter.JobAdvertisementSearch;
 import com.example.backend.dto.job.JobAdvertisementCreateRequestDto;
 import com.example.backend.dto.job.JobAdvertisementDto;
 import com.example.backend.exceptions.ErrorCode;
@@ -11,6 +12,7 @@ import com.example.backend.repo.file.JobAdvertisementRepo;
 import com.example.backend.repo.job.TagRepo;
 import com.example.backend.service.security.Security;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -53,5 +55,10 @@ public class JobAdvertisementService implements JobAdvertisements {
         advertisement.setCreator(security.getCurrentUser());
 
         return mapper.toDto(repo.save(advertisement));
+    }
+
+    @Override
+    public Page<JobAdvertisementDto> search(JobAdvertisementSearch search) {
+        return null;
     }
 }
