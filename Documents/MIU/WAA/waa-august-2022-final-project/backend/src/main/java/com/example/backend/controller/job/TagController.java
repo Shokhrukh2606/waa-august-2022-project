@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,7 +20,7 @@ public class TagController {
     private final Tags tags;
 
     @GetMapping("/filter")
-    public List<TagDto> searchTags(TagSearch search){
+    public List<TagDto> searchTags(@Valid TagSearch search){
         return tags.search(search);
     }
 

@@ -32,8 +32,12 @@ spring:
     default-property-inclusion: non_null
 
 keycloak:
-  realm: login-app
-  auth-server-url: http://localhost:8081
-  resource: backend
+  realm: SpringBootKeyCloak
+  auth-server-url: http://localhost:8180/auth
+  resource: login-app
   public-client: true
   bearer-only: true
+
+file-storage:
+  prop:
+    upload-dir: Users/javokhir/Downloads

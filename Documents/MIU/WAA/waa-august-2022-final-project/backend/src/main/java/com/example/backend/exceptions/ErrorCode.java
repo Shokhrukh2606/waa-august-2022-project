@@ -16,5 +16,10 @@ public enum ErrorCode {
     NOT_A_DATE,
     NOT_A_LIST,
     FORBIDDEN,
+    COULD_NOT_INITIALIZE_DIRECTION,
+    FILE_EMPTY,
+    FILED_STORE_EMPTY_FILE,
+    USERNAME_NOT_FOUND
+    ;
 
 }
