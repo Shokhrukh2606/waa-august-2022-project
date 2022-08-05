@@ -103,11 +103,6 @@ function Presentation() {
       >
         <Counters />
         <Information />
-        <DesignBlocks />
-        <Pages />
-        <Container sx={{ mt: 6 }}>
-          <BuiltByDevelopers />
-        </Container>
         <Container>
           <Grid container spacing={3}>
             <Grid item xs={12} lg={4}>
