@@ -12,6 +12,7 @@ import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,10 +22,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @AllArgsConstructor
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
+
+    private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/v2/api-docs/**", "/swagger.json",
+            "/swagger-ui.html", "/webjars/**", "/api/resource/uploads/**"};
 
     private static final String STUDENT_UPDATE_PROFILE_URL = "http://localhost:3000/student/%s/update";
     private static final String FACULTY_UPDATE_PROFILE_URL = "http://localhost:3000/faculty/%s/update";
@@ -33,10 +38,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final StudentRepo studentRepo;
     private final FacultyRepo facultyRepo;
 
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
     @SuppressWarnings("NullableProblems")
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         try {
             security.getCurrentUser();
         } catch (UsernameNotFoundException ignore) {
@@ -80,8 +86,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             response.setHeader("Location", redirectUrl);
             response.setStatus(302);
+        }catch (Exception ignore){
+        }finally {
+            filterChain.doFilter(request, response);
         }
 
-        filterChain.doFilter(request, response);
+
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return Arrays.stream(AUTH_WHITELIST)
+                .anyMatch(p -> pathMatcher.match(p, request.getServletPath()));
     }
 }
