@@ -3,6 +3,7 @@ package com.example.backend.domain;
 import com.example.backend.domain.user.LocalUser;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.FetchType;

@@ -33,7 +33,6 @@ public class JobAdvertisementService implements JobAdvertisements {
     private final JobAdvertisementRepo repo;
     private final JobAdvertisementMapper mapper;
     private final TagRepo tagRepo;
-
     private final Security security;
 
     @Override
@@ -48,7 +47,7 @@ public class JobAdvertisementService implements JobAdvertisements {
             throw new LocalizedApplicationException(ErrorCode.MISSING_REQUIRED_FIELD, "city");
         }
 
-        if (ObjectUtils.isEmpty(dto.getCity())) {
+        if (ObjectUtils.isEmpty(dto.getDescription())) {
             throw new LocalizedApplicationException(ErrorCode.MISSING_REQUIRED_FIELD, "description");
         }
 

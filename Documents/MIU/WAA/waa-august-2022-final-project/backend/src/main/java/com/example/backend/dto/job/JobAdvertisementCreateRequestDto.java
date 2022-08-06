@@ -4,6 +4,7 @@ import com.example.backend.domain.job.City;
 import com.example.backend.dto.AbstractRequest;
 import com.example.backend.dto.file.ResourceFileDto;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import java.util.List;
 public class JobAdvertisementCreateRequestDto implements AbstractRequest {
 
     @NotBlank
+    @ApiModelProperty(required = true)
     private String companyName;
 
     private List<String> tags = new ArrayList<>();
