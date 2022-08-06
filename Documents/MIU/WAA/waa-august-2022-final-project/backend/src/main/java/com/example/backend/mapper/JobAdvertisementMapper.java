@@ -13,4 +13,7 @@ public interface JobAdvertisementMapper {
     JobAdvertisement fromCreate(JobAdvertisementCreateRequestDto dto);
 
     JobAdvertisementDto toDto(JobAdvertisement advertisement);
+
+    @Mapping(target = "files", ignore = true)
+    JobAdvertisementDto toSimpleDto(JobAdvertisement advertisement);
 }

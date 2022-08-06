@@ -22,7 +22,7 @@ public class AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "deleted", nullable = false)
+    @Column(name = "deleted", nullable = false, columnDefinition = "boolean default false")
     private boolean deleted;
 
     @ManyToOne(fetch = FetchType.LAZY)

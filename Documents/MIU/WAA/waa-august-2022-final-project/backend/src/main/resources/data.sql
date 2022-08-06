@@ -1370,7 +1370,7 @@ insert into cities(id, name, state) values(1369, 'The Villages', 'FLORIDA');
 insert into cities(id, name, state) values(1370, 'Thonotosassa', 'FLORIDA');
 insert into cities(id, name, state) values(1371, 'Three Lakes', 'FLORIDA');
 insert into cities(id, name, state) values(1372, 'Titusville', 'FLORIDA');
-insert into cities(id, name, state) values(1373, 'Town 'n' Country', 'FLORIDA');
+insert into cities(id, name, state) values(1373, 'Town n Country', 'FLORIDA');
 insert into cities(id, name, state) values(1374, 'Treasure Island', 'FLORIDA');
 insert into cities(id, name, state) values(1375, 'Union Park', 'FLORIDA');
 insert into cities(id, name, state) values(1376, 'University', 'FLORIDA');

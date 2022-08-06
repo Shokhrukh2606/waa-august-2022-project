@@ -11,11 +11,19 @@ import com.example.backend.mapper.JobAdvertisementMapper;
 import com.example.backend.repo.file.JobAdvertisementRepo;
 import com.example.backend.repo.job.TagRepo;
 import com.example.backend.service.security.Security;
+import com.example.backend.utils.DaoUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
+
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -44,12 +52,7 @@ public class JobAdvertisementService implements JobAdvertisements {
             throw new LocalizedApplicationException(ErrorCode.MISSING_REQUIRED_FIELD, "description");
         }
 
-        var tags = tagRepo.saveAll(
-                dto.getTags().stream()
-                        .filter(item -> tagRepo.findByTitle(item).isEmpty())
-                        .map(Tag::new)
-                        .collect(Collectors.toList())
-        );
+        var tags = tagRepo.saveAll(dto.getTags().stream().filter(item -> tagRepo.findByTitle(item).isEmpty()).map(Tag::new).collect(Collectors.toList()));
 
         advertisement.setTags(tags);
         advertisement.setCreator(security.getCurrentUser());
@@ -59,6 +62,25 @@ public class JobAdvertisementService implements JobAdvertisements {
 
     @Override
     public Page<JobAdvertisementDto> search(JobAdvertisementSearch search) {
-        return null;
+        return repo.findAll((Specification<JobAdvertisement>) (root, query, cb) -> {
+            var predicates = new ArrayList<Predicate>();
+
+            if (!ObjectUtils.isEmpty(search.getTags())) {
+                var join = root.join("tags").get("title");
+                search.getTags().forEach(item -> predicates.add(cb.equal(join, item)));
+            }
+
+            if (!ObjectUtils.isEmpty(search.getState())) {
+                predicates.add(cb.equal(root.get("city").get("state"), search.getState().name()));
+            }
+            if (!ObjectUtils.isEmpty(search.getCity())) {
+                predicates.add(cb.equal(root.get("city").get("name"), search.getCity()));
+            }
+            if (!ObjectUtils.isEmpty(search.getCompanyName())) {
+                predicates.add(cb.like(root.get("companyName"), DaoUtils.toLikeCriteria(search.getCompanyName())));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        }, DaoUtils.toPaging(search)).map(mapper::toSimpleDto);
     }
 }
