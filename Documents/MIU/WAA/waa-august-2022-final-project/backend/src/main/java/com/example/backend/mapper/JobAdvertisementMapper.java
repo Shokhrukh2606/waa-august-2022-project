@@ -16,4 +16,10 @@ public interface JobAdvertisementMapper {
 
     @Mapping(target = "files", ignore = true)
     JobAdvertisementDto toSimpleDto(JobAdvertisement advertisement);
+
+
+
+
+
 }
+
