@@ -30,6 +30,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/resource/uploads/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/students").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated();
     }

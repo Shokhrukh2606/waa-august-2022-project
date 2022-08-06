@@ -3,6 +3,7 @@ package com.example.backend.exceptions;
 public enum ErrorCode {
 
     ENTITY_NOT_FOUND,
+    COULD_NOT_CREATE_ENTITY,
 
     MISSING_REQUIRED_FIELD,
     MISSING_REQUIRED_FILE,

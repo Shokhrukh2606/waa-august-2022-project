@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Enumerated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "students")
+@ToString
 public class Student extends LocalUser {
 
     @Column(columnDefinition = "NUMERIC(5,2)")
@@ -23,4 +25,7 @@ public class Student extends LocalUser {
     @Enumerated(value = EnumType.STRING)
     private Major major;
 
+    public Student(String email, String firstname, String lastname) {
+        super(email, firstname, lastname);
+    }
 }
