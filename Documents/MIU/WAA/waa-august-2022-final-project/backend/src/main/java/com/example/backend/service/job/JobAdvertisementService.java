@@ -7,7 +7,9 @@ import com.example.backend.dto.job.JobAdvertisementCreateRequestDto;
 import com.example.backend.dto.job.JobAdvertisementDto;
 import com.example.backend.exceptions.ErrorCode;
 import com.example.backend.exceptions.LocalizedApplicationException;
+import com.example.backend.mapper.FileMapper;
 import com.example.backend.mapper.JobAdvertisementMapper;
+import com.example.backend.repo.file.FileRepo;
 import com.example.backend.repo.file.JobAdvertisementRepo;
 import com.example.backend.repo.job.TagRepo;
 import com.example.backend.service.security.Security;
@@ -18,10 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -51,7 +50,9 @@ public class JobAdvertisementService implements JobAdvertisements {
             throw new LocalizedApplicationException(ErrorCode.MISSING_REQUIRED_FIELD, "description");
         }
 
-        var tags = tagRepo.saveAll(dto.getTags().stream().filter(item -> tagRepo.findByTitle(item).isEmpty()).map(Tag::new).collect(Collectors.toList()));
+        tagRepo.saveAll(dto.getTags().stream().filter(item -> tagRepo.findByTitle(item).isEmpty()).map(Tag::new).collect(Collectors.toList()));
+
+        var tags = tagRepo.findAllByTitleIsIn(dto.getTags());//todo check it
 
         advertisement.setTags(tags);
         advertisement.setCreator(security.getCurrentUser());
