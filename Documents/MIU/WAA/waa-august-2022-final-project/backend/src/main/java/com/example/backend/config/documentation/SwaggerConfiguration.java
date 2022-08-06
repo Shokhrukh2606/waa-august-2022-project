@@ -29,19 +29,11 @@ public class SwaggerConfiguration {
     public Docket swaggerConfig(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.example.backend"))
+                .apis(RequestHandlerSelectors.any())
                 .build()
                 .securityContexts(Collections.singletonList(securityContext()))
                 .securitySchemes(Collections.singletonList(apiKey()))
                 .apiInfo(apiInfo());
-//return new Docket(DocumentationType.SWAGGER_2)
-//                .select()
-//                .apis(RequestHandlerSelectors.basePackage("com.example.backend"))
-//                .paths(PathSelectors.any())
-//                .build()
-//                .enable(enableSwaggerPlugin)
-//                .apiInfo(apiDetails());
-
     }
 
     private SecurityContext securityContext() {

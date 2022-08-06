@@ -5,6 +5,9 @@ import com.example.backend.dto.file.ResourceFileDto;
 import com.example.backend.mapper.FileMapper;
 import com.example.backend.service.file.Files;
 import com.example.backend.service.security.Security;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -29,6 +32,7 @@ import static com.example.backend.controller.file.FileStorageController.PATH;
 @AllArgsConstructor
 @RestController
 @RequestMapping("api" + PATH)
+@ApiModel("Endpoint to handle files in storage")
 public class FileStorageController {
 
     private final Files files;
@@ -38,12 +42,14 @@ public class FileStorageController {
     public static final String PATH = "/resource/uploads";
 
     @PostMapping(produces = "application/json")
+    @ApiOperation(value = "Uploading a file", response = ResourceFileDto.class)
     public ResourceFileDto uploadFile(@RequestParam("file") MultipartFile file) {
         ResourceFile dbFile = files.storeFile(file);
         return fileMapper.toDto(dbFile);
     }
 
     @GetMapping("/{fileName:.+}")
+    @ApiOperation(value = "Downloading a file", response = Resource.class)
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = files.loadFileAsResource(fileName.replace("|", "/"));
         String contentType = null;
@@ -64,6 +70,7 @@ public class FileStorageController {
     }
 
     @DeleteMapping("/{url}")
+    @ApiOperation(value = "Deleting a file", response = Boolean.class)
     public ResponseEntity<Boolean> delete(@PathVariable(value = "url") String url) {
         files.removeFile(url);
         return ResponseEntity.ok(true);
