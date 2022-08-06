@@ -2,10 +2,13 @@ server:
   port: 8081
 
 spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
   datasource:
     url: jdbc:postgresql://localhost:5432/waa_lab6
     username: postgres
-    password: postgres
+    password: root
 
     driver-class-name: org.postgresql.Driver
     hikari:

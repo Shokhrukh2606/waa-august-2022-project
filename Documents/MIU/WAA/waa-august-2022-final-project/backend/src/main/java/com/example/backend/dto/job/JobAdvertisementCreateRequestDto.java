@@ -3,6 +3,7 @@ package com.example.backend.dto.job;
 import com.example.backend.domain.job.City;
 import com.example.backend.dto.AbstractRequest;
 import com.example.backend.dto.file.ResourceFileDto;
+import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@ApiModel("Job Advertisement Create Request Dto")
 public class JobAdvertisementCreateRequestDto implements AbstractRequest {
 
     @NotBlank

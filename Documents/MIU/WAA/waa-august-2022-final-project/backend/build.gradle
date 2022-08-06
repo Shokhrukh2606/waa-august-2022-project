@@ -14,7 +14,7 @@ configurations {
     }
 }
 ext {
-    swaggerVersion = "2.9.2"
+    swaggerVersion = "3.0.0"
     keycloakVersion = "19.0.1"
     mapstruct = "1.5.2.Final"
 }
