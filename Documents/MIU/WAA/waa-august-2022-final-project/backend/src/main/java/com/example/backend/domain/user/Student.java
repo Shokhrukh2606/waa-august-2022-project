@@ -1,5 +1,6 @@
 package com.example.backend.domain.user;
 
+import com.example.backend.domain.file.ResourceFile;
 import com.example.backend.domain.job.City;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,9 @@ public class Student extends LocalUser {
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
+
+    @Column(name = "cv_url")
+    private String cvUrl;
 
     public Student(String email, String firstname, String lastname) {
         super(email, firstname, lastname);

@@ -15,15 +15,11 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SecurityBean implements Security {
 
-    private static LocalUser currentUser;
 
     private final UserRepo userRepo;
 
     @Override
     public LocalUser getCurrentUser() {
-        if (currentUser != null) {
-            return currentUser;
-        }
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -39,8 +35,7 @@ public class SecurityBean implements Security {
     public LocalUser loadUserByUsername(String username) throws UsernameNotFoundException {
         var localUser = getUserByUserName(username);
         if (localUser.isPresent()) {
-            currentUser = localUser.get();
-            return currentUser;
+            return localUser.get();
         } else {
             throw new UsernameNotFoundException(ErrorCode.USERNAME_NOT_FOUND.name());
         }

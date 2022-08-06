@@ -1,8 +1,9 @@
-package com.example.backend.service.job;
+package com.example.backend.service.user;
 
 import com.example.backend.domain.user.Student;
 import com.example.backend.dto.filter.StudentSearch;
 import com.example.backend.dto.user.StudentDto;
+import com.example.backend.dto.user.StudentUpdateRequest;
 import com.example.backend.mapper.StudentMapper;
 import com.example.backend.repo.user.StudentRepo;
 import com.example.backend.utils.DaoUtils;
@@ -12,6 +13,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.Predicate;
 
 import java.util.ArrayList;
@@ -22,6 +24,19 @@ public class StudentService implements Students {
 
     private final StudentRepo repo;
     private final StudentMapper mapper;
+
+    @Override
+    public StudentDto updateProfile(Long id, StudentUpdateRequest request) {
+
+        Student student = repo.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        student.setCity(request.getCity());
+        student.setGpa(request.getGpa());
+        student.setMajor(request.getMajor());
+        student.setCvUrl(request.getCvUrl());
+
+        return mapper.toDto(repo.save(student));
+    }
 
 
     //todo only faculty member can filter students

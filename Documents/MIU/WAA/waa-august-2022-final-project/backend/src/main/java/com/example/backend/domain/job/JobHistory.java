@@ -1,6 +1,7 @@
 package com.example.backend.domain.job;
 
 import com.example.backend.domain.AbstractEntity;
+import com.example.backend.domain.user.Student;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +10,11 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,6 +46,10 @@ public class JobHistory extends AbstractEntity {
 
     @Column(columnDefinition = "TEXT")
     private String comments;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
 
 
 
