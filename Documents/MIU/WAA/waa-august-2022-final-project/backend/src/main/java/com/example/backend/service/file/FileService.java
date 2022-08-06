@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,10 +86,10 @@ public class FileService implements Files {
             if (resource.exists() && resource.isReadable()) {
                 return resource;
             } else {
-                throw new LocalizedApplicationException(ErrorCode.ENTITY_NOT_FOUND);
+                throw new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.name());
             }
         } catch (Exception ex) {
-            throw new LocalizedApplicationException(ErrorCode.ENTITY_NOT_FOUND);
+            throw new EntityNotFoundException(ErrorCode.ENTITY_NOT_FOUND.name());
         }
     }
 

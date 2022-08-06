@@ -44,4 +44,5 @@ keycloak:
 
 file-storage:
   prop:
-    upload-dir: Users/javokhir/Downloads
+    upload-dir: uploads
+#    upload-dir: /Users/javokhir/Downloads
