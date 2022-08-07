@@ -48,18 +48,6 @@ public class SwaggerConfiguration {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("EBase API").description("27.01.2022")
-                .contact(new Contact("EBase ", "https://igenius.uz/uz", ""))
-                .license("Java Team")
-                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
-                .build();
-    }
-
-    private ApiKey apiKey() {
-        return new ApiKey("JWT", "Authorization", "header");
-    }
-
-    private ApiInfo apiDetails(){
         return new ApiInfoBuilder()
                 .title("Alumni Management Portal APIs")
                 .description("WAA Aug-2022 block - Final Project APIs")
@@ -67,6 +55,10 @@ public class SwaggerConfiguration {
                 .license("Group 4")
                 .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
                 .build();
+    }
+
+    private ApiKey apiKey() {
+        return new ApiKey("JWT", "Authorization", "header");
     }
 
 }

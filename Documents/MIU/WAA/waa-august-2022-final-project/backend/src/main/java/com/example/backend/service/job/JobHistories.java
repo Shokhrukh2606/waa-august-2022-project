@@ -9,5 +9,9 @@ public interface JobHistories {
 
     JobHistoryDto create(JobHistoryCreateRequest request);
 
+    JobHistoryDto update(Long id, JobHistoryCreateRequest request);
+
+    void delete(Long id);
+
     List<JobHistoryDto> getHistoryByStudentId(Long studentId);
 }
