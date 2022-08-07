@@ -10,5 +10,5 @@ public interface Students {
 
     Page<StudentDto> search(StudentSearch search);
 
-    StudentDto updateProfile(Long id, StudentUpdateRequest request);
+    StudentDto updateProfile(StudentUpdateRequest request);
 }

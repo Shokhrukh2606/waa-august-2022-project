@@ -1,19 +1,18 @@
 package com.example.backend.dto.user;
 
-import com.example.backend.domain.job.City;
-import com.example.backend.domain.user.Major;
+import com.example.backend.domain.user.Department;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
-public class StudentDto {
+public class FacultyDto {
 
     private String email;
 
@@ -21,11 +20,5 @@ public class StudentDto {
 
     private String lastname;
 
-    private Float gpa;
-
-    private Major major;
-
-    private City city;
-
-    private String cvUrl;
+    private Department department;
 }

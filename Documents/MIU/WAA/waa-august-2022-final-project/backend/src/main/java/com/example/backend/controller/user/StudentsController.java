@@ -29,9 +29,9 @@ public class StudentsController {
         return students.search(search);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     @PreAuthorize("hasRole('ROLE_STUDENT')")
-    public StudentDto update(@PathVariable("id") Long id, @Valid @RequestBody StudentUpdateRequest request){
-        return students.updateProfile(id, request);
+    public StudentDto update(@Valid @RequestBody StudentUpdateRequest request){
+        return students.updateProfile(request);
     }
 }

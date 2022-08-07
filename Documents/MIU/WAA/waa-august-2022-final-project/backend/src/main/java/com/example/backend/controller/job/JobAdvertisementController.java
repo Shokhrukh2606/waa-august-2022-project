@@ -3,7 +3,10 @@ package com.example.backend.controller.job;
 import com.example.backend.dto.filter.JobAdvertisementSearch;
 import com.example.backend.dto.job.JobAdvertisementCreateRequestDto;
 import com.example.backend.dto.job.JobAdvertisementDto;
+import com.example.backend.dto.job.JobApplicantDto;
+import com.example.backend.dto.user.StudentDto;
 import com.example.backend.service.job.JobAdvertisements;
+import com.example.backend.service.job.JobApplicants;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/advertisements")
@@ -30,6 +35,7 @@ import javax.validation.Valid;
 public class JobAdvertisementController {
 
     private final JobAdvertisements advertisements;
+    private final JobApplicants jobApplicants;
 
     @GetMapping("/filter")
     @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
@@ -60,5 +66,17 @@ public class JobAdvertisementController {
     @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
     public void delete(@ApiParam(value = "Job advertisement id", required = true) @PathVariable("id") Long id) {
         advertisements.delete(id);
+    }
+
+    @PostMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public JobApplicantDto apply(@PathVariable("id") Long id) {
+        return jobApplicants.applyToJob(id);
+    }
+
+    @GetMapping("/{id}/applicants")
+    @PreAuthorize("hasRole('ROLE_FACULTY')")
+    public List<StudentDto> getApplicants(@PathVariable("id") Long id) {
+        return jobApplicants.getAllByJobAdvertisementId(id);
     }
 }

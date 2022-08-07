@@ -6,6 +6,7 @@ import com.example.backend.dto.user.StudentDto;
 import com.example.backend.dto.user.StudentUpdateRequest;
 import com.example.backend.mapper.StudentMapper;
 import com.example.backend.repo.user.StudentRepo;
+import com.example.backend.service.security.Security;
 import com.example.backend.utils.DaoUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,10 +26,12 @@ public class StudentService implements Students {
     private final StudentRepo repo;
     private final StudentMapper mapper;
 
-    @Override
-    public StudentDto updateProfile(Long id, StudentUpdateRequest request) {
+    private final Security security;
 
-        Student student = repo.findById(id).orElseThrow(EntityNotFoundException::new);
+    @Override
+    public StudentDto updateProfile(StudentUpdateRequest request) {
+
+        Student student = repo.findByEmail(security.getCurrentUser().getEmail()).orElseThrow(EntityNotFoundException::new);
 
         student.setCity(request.getCity());
         student.setGpa(request.getGpa());
