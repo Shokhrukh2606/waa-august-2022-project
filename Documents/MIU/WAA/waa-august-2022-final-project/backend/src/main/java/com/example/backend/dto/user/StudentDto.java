@@ -15,6 +15,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class StudentDto {
 
+    private Long id;
+
     private String email;
 
     private String firstname;

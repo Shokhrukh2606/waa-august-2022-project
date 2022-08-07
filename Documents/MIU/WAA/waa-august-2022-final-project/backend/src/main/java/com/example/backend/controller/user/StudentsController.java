@@ -1,8 +1,10 @@
 package com.example.backend.controller.user;
 
 import com.example.backend.dto.filter.StudentSearch;
+import com.example.backend.dto.user.CommentOnStudentDto;
 import com.example.backend.dto.user.StudentDto;
 import com.example.backend.dto.user.StudentUpdateRequest;
+import com.example.backend.service.user.CommentOnStudents;
 import com.example.backend.service.user.Students;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,12 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/students")
 public class StudentsController {
 
     private final Students students;
+    private final CommentOnStudents commentOnStudents;
 
     @GetMapping("/filter")
     @PreAuthorize("hasRole('ROLE_FACULTY')")
@@ -31,7 +36,13 @@ public class StudentsController {
 
     @PutMapping
     @PreAuthorize("hasRole('ROLE_STUDENT')")
-    public StudentDto update(@Valid @RequestBody StudentUpdateRequest request){
+    public StudentDto update(@Valid @RequestBody StudentUpdateRequest request) {
         return students.updateProfile(request);
+    }
+
+    @GetMapping("/{id}/comments")
+    @PreAuthorize("hasRole('ROLE_FACULTY')")
+    public List<CommentOnStudentDto> getCommentsByStudent(@PathVariable("id") Long id) {
+        return commentOnStudents.getAllByStudentId(id);
     }
 }
