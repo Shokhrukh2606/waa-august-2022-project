@@ -14,6 +14,8 @@ import lombok.ToString;
 @ToString
 public class FacultyDto {
 
+    private Long id;
+
     private String email;
 
     private String firstname;

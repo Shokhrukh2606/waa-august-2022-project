@@ -1,6 +1,5 @@
-package com.example.backend.dto.job;
+package com.example.backend.dto.user;
 
-import com.example.backend.dto.user.StudentDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +11,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class JobApplicantDto {
+public class CommentOnStudentDto {
 
     private Long id;
-    private JobAdvertisementDto jobAdvertisement;
+    private FacultyDto facultyMember;
     private StudentDto student;
+    private String comment;
+
 }
