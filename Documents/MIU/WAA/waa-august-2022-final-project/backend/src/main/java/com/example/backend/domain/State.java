@@ -1,5 +1,7 @@
 package com.example.backend.domain;
 
+import java.util.Arrays;
+
 public enum State {
 
     ALABAMA("ALABAMA"),
@@ -61,5 +63,9 @@ public enum State {
 
     public String getTitle() {
         return title;
+    }
+
+    public static State getByTitle(String title) {
+        return Arrays.stream(values()).filter(e -> e.getTitle().equalsIgnoreCase(title)).findAny().orElseThrow(NoSuchFieldError::new);
     }
 }
