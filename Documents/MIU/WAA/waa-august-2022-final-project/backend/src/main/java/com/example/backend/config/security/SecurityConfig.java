@@ -5,6 +5,7 @@ import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -33,6 +34,9 @@ import java.util.List;
         securedEnabled= true
 )
 public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+
+    @Value("${app.cors.allowed-origins}")
+    List<String> allowedOrigin;
 
     private static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"};
     private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/v2/api-docs/**", "/swagger.json",
@@ -76,7 +80,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
+        configuration.setAllowedOriginPatterns(allowedOrigin);
         configuration.setAllowedMethods(Arrays.asList(ALLOWED_METHODS));
         configuration.setAllowedHeaders(Arrays.asList(ALLOWED_HEADERS));
         //        configuration.setAllowCredentials(true);
