@@ -26,4 +26,6 @@ public class LocalUser extends AbstractEntity {
 
     private String lastname;
 
+    private String keyClockUserId;
+
 }

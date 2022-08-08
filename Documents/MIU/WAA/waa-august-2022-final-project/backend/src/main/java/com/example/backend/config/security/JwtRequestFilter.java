@@ -9,6 +9,7 @@ import com.example.backend.repo.user.StudentRepo;
 import com.example.backend.service.security.Security;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -57,18 +58,20 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             var isStudent = false;
 
             var context = (RefreshableKeycloakSecurityContext) authentication.getCredentials();
+            var principal = (KeycloakPrincipal<RefreshableKeycloakSecurityContext>)authentication.getPrincipal();
             var token = context.getToken();
 
             var email = token.getEmail();
             var firstName = token.getGivenName();
             var lastName = token.getFamilyName();
+            var keyClockUserId = principal.getName();
 
             String redirectUrl;
 
             isStudent = authentication.getAuthorities().stream().anyMatch(item -> item.getAuthority().toLowerCase().contains("student"));
 
             if (isStudent) {
-                Student student = new Student(email, firstName, lastName);
+                Student student = new Student(email, firstName, lastName, keyClockUserId);
                 student = studentRepo.save(student);
 
                 if (ObjectUtils.isEmpty(student.getId())) {
@@ -77,7 +80,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                 redirectUrl = String.format(STUDENT_UPDATE_PROFILE_URL, student.getId());
             } else {
-                Faculty faculty = new Faculty(email, firstName, lastName);
+                Faculty faculty = new Faculty(email, firstName, lastName, keyClockUserId);
                 faculty = facultyRepo.save(faculty);
 
                 if (ObjectUtils.isEmpty(faculty.getId())) {

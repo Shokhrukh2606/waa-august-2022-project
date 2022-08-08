@@ -12,7 +12,7 @@ public interface JobAdvertisementMapper {
     @Mapping(target = "tags", ignore = true)
     JobAdvertisement fromCreate(JobAdvertisementCreateRequestDto dto);
 
-    @Mapping(source = "creator.id", target = "creatorId")
+    @Mapping(source = "creator.keyClockUserId", target = "creatorId")
     JobAdvertisementDto toDto(JobAdvertisement advertisement);
 
 }

@@ -21,7 +21,7 @@ public class Faculty extends LocalUser {
     @Enumerated(value = EnumType.STRING)
     private Department department;
 
-    public Faculty(String email, String firstname, String lastname) {
-        super(email, firstname, lastname);
+    public Faculty(String email, String firstname, String lastname, String keyClockUserId) {
+        super(email, firstname, lastname, keyClockUserId);
     }
 }

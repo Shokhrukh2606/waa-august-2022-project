@@ -33,5 +33,5 @@ public class JobAdvertisementDto {
 
     private String benefits;
 
-    private Long creatorId;
+    private String creatorId;
 }

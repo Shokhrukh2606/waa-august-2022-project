@@ -45,7 +45,7 @@ public class Student extends LocalUser {
             , inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "id", nullable = false)})
     private List<Tag> tags;
 
-    public Student(String email, String firstname, String lastname) {
-        super(email, firstname, lastname);
+    public Student(String email, String firstname, String lastname, String keyClockUserId) {
+        super(email, firstname, lastname, keyClockUserId);
     }
 }
