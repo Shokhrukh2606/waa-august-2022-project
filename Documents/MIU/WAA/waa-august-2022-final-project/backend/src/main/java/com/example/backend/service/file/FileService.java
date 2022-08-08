@@ -23,9 +23,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.Date;
 import java.util.Objects;
 
+import static com.example.backend.controller.file.FileStorageController.PATH;
 import static java.nio.file.Files.copy;
 import static java.nio.file.Files.createDirectories;
-import static com.example.backend.controller.file.FileStorageController.PATH;
 
 @Service
 public class FileService implements Files {
@@ -94,15 +94,16 @@ public class FileService implements Files {
     }
 
     @Override
-    public void removeFile(String url) {
+    public void removeFile(Long id) {
         try {
-            String original = url;
-            url = url.replace("/api" + PATH + "/", "");
+            var resourceFile = fileRepo.findById(id).orElseThrow(() -> new LocalizedApplicationException(ErrorCode.ENTITY_NOT_FOUND));
+            String original = resourceFile.getUrl();
+            var url = resourceFile.getUrl().replace("/api" + PATH + "/", "");
             Path filePath = rootLocation.resolve(url).normalize();
             File file = new File(String.valueOf(filePath));
             if (file.exists()) {
                 java.nio.file.Files.delete(filePath);
-                fileRepo.delete(fileRepo.findByUrl(original).orElseThrow(() -> new LocalizedApplicationException(ErrorCode.ENTITY_NOT_FOUND)));
+                fileRepo.delete(resourceFile);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
