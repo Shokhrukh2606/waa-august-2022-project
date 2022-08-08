@@ -83,12 +83,14 @@ public class JobAdvertisementController {
     }
 
     @PostMapping("/{id}")
+    @ApiOperation(value = "Applying to a job in a job advertisement")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public JobApplicantDto apply(@PathVariable("id") Long id) {
         return jobApplicants.applyToJob(id);
     }
 
     @GetMapping("/{id}/applicants")
+    @ApiOperation(value = "Getting all the applicants for a particular job advertisement")
     @PreAuthorize("hasRole('ROLE_FACULTY')")
     public List<StudentDto> getApplicants(@PathVariable("id") Long id) {
         return jobApplicants.getAllByJobAdvertisementId(id);
