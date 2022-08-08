@@ -10,6 +10,6 @@ public interface Files {
 
     Resource loadFileAsResource(String fileName);
 
-    void removeFile(String url);
+    void removeFile(Long id);
 
 }

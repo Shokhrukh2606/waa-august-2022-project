@@ -69,10 +69,10 @@ public class FileStorageController {
                 .body(resource);
     }
 
-    @DeleteMapping("/{url}")
+    @DeleteMapping("/{id}")
     @ApiOperation(value = "Deleting a file", response = Boolean.class)
-    public ResponseEntity<Boolean> delete(@PathVariable(value = "url") String url) {
-        files.removeFile(url);
+    public ResponseEntity<Boolean> delete(@PathVariable(value = "id") Long id) {
+        files.removeFile(id);
         return ResponseEntity.ok(true);
     }
 }
