@@ -32,4 +32,6 @@ public class JobAdvertisementDto {
     private String description;
 
     private String benefits;
+
+    private Long creatorId;
 }
