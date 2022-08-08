@@ -41,13 +41,27 @@ public class JobAdvertisementController {
     @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
     @ApiOperation(value = "Getting the list of Job advertisements", response = JobAdvertisementDto.class, responseContainer = "List")
     public Page<JobAdvertisementDto> search(@ApiParam("Request list") @Valid JobAdvertisementSearch search) {
-        return advertisements.search(search);
+
+        log.info("Accessing GET api/advertisements/filter {}", search);
+
+        var found = advertisements.search(search);
+
+        log.info("{} advertisements were found", found.getTotalElements());
+
+        return found;
     }
 
     @PostMapping
     @ApiOperation(value = "Creating a job advertisement", response = JobAdvertisementDto.class)
     @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
     public JobAdvertisementDto create(@ApiParam(value = "Request body", required = true) @Valid @RequestBody JobAdvertisementCreateRequestDto dto) {
+
+        log.info("Accessing POST api/advertisements {}", dto);
+
+        var result = advertisements.create(dto);
+
+        log.info("{} advertisements was created", result);
+
         return advertisements.create(dto);
     }
 

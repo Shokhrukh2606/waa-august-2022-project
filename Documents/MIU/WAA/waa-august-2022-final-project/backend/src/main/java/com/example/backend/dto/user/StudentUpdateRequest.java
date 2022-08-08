@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,5 +25,7 @@ public class StudentUpdateRequest {
     private City city;
 
     private String cvUrl;
+
+    private List<String> tags = new ArrayList<>();
 
 }

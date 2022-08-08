@@ -8,6 +8,7 @@ import com.example.backend.repo.user.FacultyRepo;
 import com.example.backend.repo.user.StudentRepo;
 import com.example.backend.service.security.Security;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.keycloak.adapters.RefreshableKeycloakSecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 
+@Slf4j
 @AllArgsConstructor
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
@@ -44,6 +46,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
+            log.info("{} on doFilterInternal request", request);
             security.getCurrentUser();
         } catch (UsernameNotFoundException ignore) {
             var authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -7,6 +7,7 @@ public enum ErrorCode {
 
     MISSING_REQUIRED_FIELD,
     MISSING_REQUIRED_FILE,
+    VALIDATION_ERROR,
 
     NOT_A_STRING,
     NOT_A_LATIN,

@@ -42,6 +42,13 @@ keycloak:
   public-client: true
   bearer-only: true
 
+logging:
+  level:
+    org:
+      springframework:
+        security: info
+        boot.autoconfigure: info
+
 app:
   cors:
     allowed-origins: http://localhost:3000

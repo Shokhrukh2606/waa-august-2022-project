@@ -61,7 +61,7 @@ public class JobAdvertisementService implements JobAdvertisements {
 
         tagRepo.saveAll(dto.getTags().stream().filter(item -> tagRepo.findByTitle(item).isEmpty()).map(Tag::new).collect(Collectors.toList()));
 
-        var tags = tagRepo.findAllByTitleIsIn(dto.getTags());//todo check it
+        var tags = tagRepo.findAllByTitleIsIn(dto.getTags());
 
         advertisement.setTags(tags);
         advertisement.setCreator(security.getCurrentUser());

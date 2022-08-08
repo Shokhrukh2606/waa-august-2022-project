@@ -1,10 +1,12 @@
 package com.example.backend.service.user;
 
+import com.example.backend.domain.job.Tag;
 import com.example.backend.domain.user.Student;
 import com.example.backend.dto.filter.StudentSearch;
 import com.example.backend.dto.user.StudentDto;
 import com.example.backend.dto.user.StudentUpdateRequest;
 import com.example.backend.mapper.StudentMapper;
+import com.example.backend.repo.job.TagRepo;
 import com.example.backend.repo.user.StudentRepo;
 import com.example.backend.service.security.Security;
 import com.example.backend.utils.DaoUtils;
@@ -18,6 +20,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.Predicate;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -26,10 +29,15 @@ public class StudentService implements Students {
     private final StudentRepo repo;
     private final StudentMapper mapper;
 
+    private final TagRepo tagRepo;
+
     private final Security security;
 
     @Override
     public StudentDto updateProfile(StudentUpdateRequest request) {
+
+        tagRepo.saveAll(request.getTags().stream().filter(item -> tagRepo.findByTitle(item).isEmpty()).map(Tag::new).collect(Collectors.toList()));
+        var tags = tagRepo.findAllByTitleIsIn(request.getTags());
 
         Student student = repo.findByEmail(security.getCurrentUser().getEmail()).orElseThrow(EntityNotFoundException::new);
 
@@ -37,12 +45,11 @@ public class StudentService implements Students {
         student.setGpa(request.getGpa());
         student.setMajor(request.getMajor());
         student.setCvUrl(request.getCvUrl());
+        student.setTags(tags);
 
         return mapper.toDto(repo.save(student));
     }
 
-
-    //todo only faculty member can filter students
     @Override
     public Page<StudentDto> search(StudentSearch search) {
         return repo.findAll((Specification<Student>) (root, query, cb) -> {
