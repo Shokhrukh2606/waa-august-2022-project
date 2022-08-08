@@ -44,11 +44,11 @@ public class JobAdvertisementController {
 
         log.info("Accessing GET api/advertisements/filter {}", search);
 
-        var found = advertisements.search(search);
+        var result = advertisements.search(search);
 
-        log.info("{} advertisements were found", found.getTotalElements());
+        log.info("{} advertisements were found", result.getTotalElements());
 
-        return found;
+        return result;
     }
 
     @PostMapping
@@ -62,7 +62,7 @@ public class JobAdvertisementController {
 
         log.info("{} advertisements was created", result);
 
-        return advertisements.create(dto);
+        return result;
     }
 
     @PutMapping("/{id}")
@@ -72,27 +72,52 @@ public class JobAdvertisementController {
             @ApiParam(value = "Job advertisement id", required = true) @PathVariable("id") Long id,
             @ApiParam(value = "Request body", required = true) @Valid @RequestBody JobAdvertisementCreateRequestDto dto
     ) {
-        return advertisements.update(id, dto);
+        log.info("Accessing PUT api/advertisements/{} {}", id, dto);
+
+        var result = advertisements.update(id, dto);
+
+        log.info("{} advertisement was updated", result);
+
+        return result;
     }
 
     @ApiOperation(value = "Deleting a job advertisement")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
     public void delete(@ApiParam(value = "Job advertisement id", required = true) @PathVariable("id") Long id) {
+
+        log.info("Accessing DELETE api/advertisements/{}", id);
+
         advertisements.delete(id);
+
+        log.info("Advertisement was deleted");
     }
 
     @PostMapping("/{id}")
     @ApiOperation(value = "Applying to a job in a job advertisement")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public JobApplicantDto apply(@PathVariable("id") Long id) {
-        return jobApplicants.applyToJob(id);
+
+        log.info("Accessing POST api/advertisements/{}", id);
+
+        var result = jobApplicants.applyToJob(id);
+
+        log.info("{} was created", result);
+
+        return result;
     }
 
     @GetMapping("/{id}/applicants")
     @ApiOperation(value = "Getting all the applicants for a particular job advertisement")
     @PreAuthorize("hasRole('ROLE_FACULTY')")
     public List<StudentDto> getApplicants(@PathVariable("id") Long id) {
-        return jobApplicants.getAllByJobAdvertisementId(id);
+
+        log.info("Accessing GET api/advertisements/{}/applicants", id);
+
+        var result = jobApplicants.getAllByJobAdvertisementId(id);
+
+        log.info("{} applicants were retrieved for a job advertisement", result);
+
+        return result;
     }
 }

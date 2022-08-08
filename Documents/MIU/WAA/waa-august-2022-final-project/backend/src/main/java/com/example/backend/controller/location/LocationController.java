@@ -8,6 +8,7 @@ import com.example.backend.service.location.Locations;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/locations")
 @ApiModel("Endpoint for handling locations")
+@Slf4j
 public class LocationController {
 
     private final Locations locations;
@@ -27,12 +29,26 @@ public class LocationController {
     @GetMapping("/states")
     @ApiOperation(value = "Getting the list of states", response = State.class, responseContainer = "List")
     private List<State> getStates() {
-        return locations.getStates();
+
+        log.info("Accessing GET api/locations/states");
+
+        var result = locations.getStates();
+
+        log.info("{} states list was retrieved", result);
+
+        return result;
     }
 
     @GetMapping("/cities/filter")
     @ApiOperation(value = "Getting the list of cities", response = City.class, responseContainer = "List")
     private List<City> searchCities(@Valid LocationSearch search) {
-        return locations.search(search);
+
+        log.info("Accessing GET api/locations/cities/filter {}", search);
+
+        var result = locations.search(search);
+
+        log.info("{} cities list was retrieved", result);
+
+        return result;
     }
 }

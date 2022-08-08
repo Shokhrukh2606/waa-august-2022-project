@@ -9,6 +9,7 @@ import com.example.backend.service.user.FacultyService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("api/faculties")
 @ApiModel("Endpoint for handling faculties")
+@Slf4j
 public class FacultyController {
 
     private final Faculties faculties;
@@ -29,6 +31,13 @@ public class FacultyController {
     @ApiOperation(value = "Updating a faculty profile", response = FacultyDto.class)
     @PreAuthorize("hasRole('ROLE_FACULTY')")
     public FacultyDto update(@Valid @RequestBody FacultyUpdateRequest request){
-        return faculties.updateProfile(request);
+
+        log.info("Accessing PUT api/faculties {}", request);
+
+        var result = faculties.updateProfile(request);
+
+        log.info("{} faculty profile was updated", result);
+
+        return result;
     }
 }
