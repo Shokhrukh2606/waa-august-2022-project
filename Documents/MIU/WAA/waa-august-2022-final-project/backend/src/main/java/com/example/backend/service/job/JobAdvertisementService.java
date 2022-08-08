@@ -119,7 +119,7 @@ public class JobAdvertisementService implements JobAdvertisements {
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
-        }, DaoUtils.toPaging(search)).map(mapper::toSimpleDto);
+        }, DaoUtils.toPaging(search)).map(mapper::toDto);
     }
 
     @Override
