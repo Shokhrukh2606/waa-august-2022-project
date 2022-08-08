@@ -9,6 +9,7 @@ import com.example.backend.service.user.Students;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/students")
 @ApiModel("Endpoint for handling students")
+@Slf4j
 public class StudentsController {
 
     private final Students students;
@@ -35,20 +37,41 @@ public class StudentsController {
     @ApiOperation(value = "Searching for students", response = StudentDto.class, responseContainer = "List")
     @PreAuthorize("hasRole('ROLE_FACULTY')")
     public Page<StudentDto> search(@Valid StudentSearch search) {
-        return students.search(search);
+
+        log.info("Accessing GET api/students/filter {}", search);
+
+        var result = students.search(search);
+
+        log.info("{} list of students was retrieved", result);
+
+        return result;
     }
 
     @PutMapping
     @ApiOperation(value = "Updating a student profile", response = StudentDto.class)
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public StudentDto update(@Valid @RequestBody StudentUpdateRequest request) {
-        return students.updateProfile(request);
+
+        log.info("Accessing PUT api/students {}", request);
+
+        var result = students.updateProfile(request);
+
+        log.info("{} student profile was updated", result);
+
+        return result;
     }
 
     @GetMapping("/{id}/comments")
     @PreAuthorize("hasRole('ROLE_FACULTY')")
-    @ApiOperation(value="Getting the list of comments about a student", response = CommentOnStudentDto.class, responseContainer = "List")
+    @ApiOperation(value = "Getting the list of comments about a student", response = CommentOnStudentDto.class, responseContainer = "List")
     public List<CommentOnStudentDto> getCommentsByStudent(@PathVariable("id") Long id) {
-        return commentOnStudents.getAllByStudentId(id);
+
+        log.info("Accessing GET api/students/{}/comments", id);
+
+        var result = commentOnStudents.getAllByStudentId(id);
+
+        log.info("{} list of comments was retrieved", result);
+
+        return result;
     }
 }
