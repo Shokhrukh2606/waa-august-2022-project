@@ -47,7 +47,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            log.info("{} on doFilterInternal request", request);
             security.getCurrentUser();
         } catch (UsernameNotFoundException ignore) {
             var authentication = SecurityContextHolder.getContext().getAuthentication();

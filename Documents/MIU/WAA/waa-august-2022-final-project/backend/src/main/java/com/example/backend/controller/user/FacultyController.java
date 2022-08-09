@@ -2,15 +2,13 @@ package com.example.backend.controller.user;
 
 import com.example.backend.dto.user.FacultyDto;
 import com.example.backend.dto.user.FacultyUpdateRequest;
-import com.example.backend.dto.user.StudentDto;
-import com.example.backend.dto.user.StudentUpdateRequest;
 import com.example.backend.service.user.Faculties;
-import com.example.backend.service.user.FacultyService;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,5 +37,11 @@ public class FacultyController {
         log.info("{} faculty profile was updated", result);
 
         return result;
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('ROLE_FACULTY')")
+    public FacultyDto getAuthorizedStudent() {
+        return faculties.getAuthorizedStudent();
     }
 }

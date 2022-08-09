@@ -11,4 +11,6 @@ public interface Students {
     Page<StudentDto> search(StudentSearch search);
 
     StudentDto updateProfile(StudentUpdateRequest request);
+
+    StudentDto getAuthorizedStudent();
 }

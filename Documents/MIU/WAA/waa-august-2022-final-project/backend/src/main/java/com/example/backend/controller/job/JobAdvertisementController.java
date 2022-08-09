@@ -120,4 +120,10 @@ public class JobAdvertisementController {
 
         return result;
     }
+
+    @GetMapping("/recently-applied")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
+    public List<JobAdvertisementDto> getRecentlyAppliedAds(){
+        return advertisements.getRecentlyAppliedAds();
+    }
 }

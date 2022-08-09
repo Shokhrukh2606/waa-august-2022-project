@@ -13,6 +13,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -29,4 +33,7 @@ public class AbstractEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private LocalUser creator;
+
+    @Temporal(value = TemporalType.TIMESTAMP)
+    protected Date createDate = new Date();
 }

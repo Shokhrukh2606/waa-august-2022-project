@@ -28,6 +28,7 @@ import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Optional;
@@ -73,7 +74,7 @@ public class JobAdvertisementService implements JobAdvertisements {
     public JobAdvertisementDto update(Long id, JobAdvertisementCreateRequestDto dto) {
         LocalUser localUser = security.getCurrentUser();
         Optional<JobAdvertisement> advertisement = repo.findById(id);
-        if(advertisement.isEmpty()){
+        if (advertisement.isEmpty()) {
             throw new LocalizedApplicationException(ErrorCode.ENTITY_NOT_FOUND);
         }
 
@@ -123,17 +124,21 @@ public class JobAdvertisementService implements JobAdvertisements {
     }
 
     @Override
+    public List<JobAdvertisementDto> getRecentlyAppliedAds() {
+        return repo.findRecentlyAppliedAds().stream().map(mapper::toDto).collect(Collectors.toList());
+    }
+
+    @Override
     public void delete(Long id) {
         Optional<JobAdvertisement> jobAdvertisementOptional = repo.findById(id);
-        if (jobAdvertisementOptional.isPresent()){
+        if (jobAdvertisementOptional.isPresent()) {
             JobAdvertisement advertisement = jobAdvertisementOptional.get();
             LocalUser localUser = security.getCurrentUser();
-            if(localUser.getId().equals(advertisement.getCreator().getId())){
+            if (localUser.getId().equals(advertisement.getCreator().getId())) {
                 repo.deleteById(id);
-            } else{
+            } else {
                 throw new AccessDeniedException(ErrorCode.FORBIDDEN + " Users can only delete their own advertisements");
             }
         }
     }
-
 }

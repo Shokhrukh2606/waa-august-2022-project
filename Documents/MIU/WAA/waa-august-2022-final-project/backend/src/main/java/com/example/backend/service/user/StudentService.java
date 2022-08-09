@@ -87,6 +87,11 @@ public class StudentService implements Students {
     }
 
     @Override
+    public StudentDto getAuthorizedStudent() {
+        return mapper.toDtoWithCV(repo.findByEmail(security.getCurrentUser().getEmail()).orElseThrow(EntityNotFoundException::new));
+    }
+
+    @Override
     public Page<StudentDto> search(StudentSearch search) {
         return repo.findAll((Specification<Student>) (root, query, cb) -> {
             var predicates = new ArrayList<Predicate>();

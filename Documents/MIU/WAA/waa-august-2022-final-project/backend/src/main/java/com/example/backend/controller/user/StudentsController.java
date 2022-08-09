@@ -74,4 +74,10 @@ public class StudentsController {
 
         return result;
     }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
+    public StudentDto getAuthorizedStudent() {
+        return students.getAuthorizedStudent();
+    }
 }
