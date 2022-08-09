@@ -109,7 +109,7 @@ public class JobAdvertisementController {
 
     @GetMapping("/{id}/applicants")
     @ApiOperation(value = "Getting all the applicants for a particular job advertisement")
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
     public List<StudentDto> getApplicants(@PathVariable("id") Long id) {
 
         log.info("Accessing GET api/advertisements/{}/applicants", id);
