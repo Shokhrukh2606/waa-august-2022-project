@@ -18,6 +18,12 @@ import java.util.List;
 @ToString
 public class StudentUpdateRequest {
 
+    private String firstname;
+
+    private String lastname;
+
+    private String email;
+
     private Float gpa;
 
     private Major major;

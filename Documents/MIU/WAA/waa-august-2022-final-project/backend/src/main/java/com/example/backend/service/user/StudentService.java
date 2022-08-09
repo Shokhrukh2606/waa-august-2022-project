@@ -11,6 +11,10 @@ import com.example.backend.repo.user.StudentRepo;
 import com.example.backend.service.security.Security;
 import com.example.backend.utils.DaoUtils;
 import lombok.AllArgsConstructor;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -30,8 +34,9 @@ public class StudentService implements Students {
     private final StudentMapper mapper;
 
     private final TagRepo tagRepo;
-
     private final Security security;
+
+    private final Keycloak keycloak;
 
     @Override
     public StudentDto updateProfile(StudentUpdateRequest request) {
@@ -45,7 +50,38 @@ public class StudentService implements Students {
         student.setGpa(request.getGpa());
         student.setMajor(request.getMajor());
         student.setCvUrl(request.getCvUrl());
+
+        if (!ObjectUtils.isEmpty(request.getFirstname())) {
+            student.setFirstname(request.getFirstname());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getLastname())) {
+            student.setLastname(request.getLastname());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getEmail())) {
+            student.setEmail(request.getEmail());
+        }
+
         student.setTags(tags);
+
+        UsersResource usersResource = keycloak.realm("SpringBootKeyCloak").users();
+        UserResource userResource = usersResource.get(student.getKeyClockUserId());
+        UserRepresentation userRepresentation = userResource.toRepresentation();
+
+        if (!ObjectUtils.isEmpty(request.getFirstname())) {
+            userRepresentation.setFirstName(request.getFirstname());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getLastname())) {
+            userRepresentation.setLastName(request.getLastname());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getEmail())) {
+            userRepresentation.setEmail(request.getEmail());
+        }
+
+        userResource.update(userRepresentation);
 
         return mapper.toDto(repo.save(student));
     }

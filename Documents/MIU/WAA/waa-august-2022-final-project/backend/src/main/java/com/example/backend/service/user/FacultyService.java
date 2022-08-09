@@ -7,7 +7,12 @@ import com.example.backend.mapper.FacultyMapper;
 import com.example.backend.repo.user.FacultyRepo;
 import com.example.backend.service.security.Security;
 import lombok.AllArgsConstructor;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -19,12 +24,43 @@ public class FacultyService implements Faculties {
     private final FacultyMapper mapper;
     private final Security security;
 
+    private final Keycloak keycloak;
+
     @Override
     public FacultyDto updateProfile(FacultyUpdateRequest request) {
 
         Faculty faculty = repo.findByEmail(security.getCurrentUser().getEmail()).orElseThrow(EntityNotFoundException::new);
 
         faculty.setDepartment(request.getDepartment());
+
+        if (!ObjectUtils.isEmpty(request.getFirstname())) {
+            faculty.setFirstname(request.getFirstname());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getLastname())) {
+            faculty.setLastname(request.getLastname());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getEmail())) {
+            faculty.setEmail(request.getEmail());
+        }
+
+        UsersResource usersResource = keycloak.realm("SpringBootKeyCloak").users();
+        UserResource userResource = usersResource.get(faculty.getKeyClockUserId());
+        UserRepresentation userRepresentation = userResource.toRepresentation();
+
+        if (!ObjectUtils.isEmpty(request.getFirstname())) {
+            userRepresentation.setFirstName(request.getFirstname());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getLastname())) {
+            userRepresentation.setLastName(request.getLastname());
+        }
+
+        if (!ObjectUtils.isEmpty(request.getEmail())) {
+            userRepresentation.setEmail(request.getEmail());
+        }
+
         return mapper.toDto(repo.save(faculty));
     }
 }

@@ -14,5 +14,11 @@ import lombok.ToString;
 @ToString
 public class FacultyUpdateRequest {
 
+    private String firstname;
+
+    private String lastname;
+
+    private String email;
+
     private Department department;
 }

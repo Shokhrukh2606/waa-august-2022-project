@@ -45,6 +45,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.keycloak.bom/keycloak-adapter-bom
     implementation group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: "${keycloakVersion}", ext: 'pom'
 
+    // https://mvnrepository.com/artifact/org.keycloak/keycloak-admin-client
+    implementation group: 'org.keycloak', name: 'keycloak-admin-client', version: '19.0.1'
+
+
     implementation "org.mapstruct:mapstruct:${mapstruct}"
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct}"
 
