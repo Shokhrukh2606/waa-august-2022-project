@@ -64,7 +64,7 @@ public class JobHistoryController {
 
     //todo only faculty member can do this
     @GetMapping("/students/{id}/job-histories")
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
     @ApiOperation(value = "Getting a list of jobs that a student has worked at", response = JobHistoryDto.class, responseContainer = "List")
     public List<JobHistoryDto> getByStudentId(@PathVariable("id") Long studentId) {
 
