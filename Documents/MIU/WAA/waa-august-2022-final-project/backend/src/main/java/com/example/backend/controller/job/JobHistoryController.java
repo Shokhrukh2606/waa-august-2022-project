@@ -39,6 +39,7 @@ public class JobHistoryController {
     }
 
     @PutMapping("/students/job-histories/{id}")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @ApiOperation(value = "Updating a job history of a student", response = JobHistoryDto.class)
     public JobHistoryDto update(@Valid @PathVariable("id") Long jobHistoryId, @RequestBody JobHistoryCreateRequest request) {
 
