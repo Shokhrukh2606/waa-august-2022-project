@@ -57,3 +57,12 @@ file-storage:
   prop:
     upload-dir: uploads
 #    upload-dir: /Users/javokhir/Downloads
+
+admin-keycloak:
+  prop:
+    realm: master
+    clientRealm: SpringBootKeyCloak
+    username: admin
+    password: admin
+    clientId: admin-cli
+    serverUrl: http://localhost:8180/auth

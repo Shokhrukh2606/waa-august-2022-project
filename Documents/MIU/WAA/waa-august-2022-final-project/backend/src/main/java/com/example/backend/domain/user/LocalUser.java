@@ -8,6 +8,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 
@@ -27,5 +29,13 @@ public class LocalUser extends AbstractEntity {
     private String lastname;
 
     private String keyClockUserId;
+
+    @Enumerated(value = EnumType.STRING)
+    private Role role;
+
+    @Column(name = "updated", nullable = false, columnDefinition = "boolean default false")
+    private boolean updated;
+
+    private String firebaseToken;
 
 }

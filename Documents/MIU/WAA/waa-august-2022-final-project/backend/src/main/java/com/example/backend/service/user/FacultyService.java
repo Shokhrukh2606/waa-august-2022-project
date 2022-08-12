@@ -6,10 +6,9 @@ import com.example.backend.dto.user.FacultyUpdateRequest;
 import com.example.backend.mapper.FacultyMapper;
 import com.example.backend.repo.user.FacultyRepo;
 import com.example.backend.service.security.Security;
+import com.example.backend.utils.KeyCloakUtils;
 import lombok.AllArgsConstructor;
-import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UserResource;
-import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -24,7 +23,7 @@ public class FacultyService implements Faculties {
     private final FacultyMapper mapper;
     private final Security security;
 
-    private final Keycloak keycloak;
+    private final KeyCloakUtils keyCloakUtils;
 
     @Override
     public FacultyDto updateProfile(FacultyUpdateRequest request) {
@@ -45,9 +44,10 @@ public class FacultyService implements Faculties {
             faculty.setEmail(request.getEmail());
         }
 
-        UsersResource usersResource = keycloak.realm("SpringBootKeyCloak").users();
-        UserResource userResource = usersResource.get(faculty.getKeyClockUserId());
-        UserRepresentation userRepresentation = userResource.toRepresentation();
+        var userResource = keyCloakUtils.getUserResource(faculty.getKeyClockUserId());
+        var userRepresentation = keyCloakUtils.getUserRepresentation(userResource);
+
+
 
         if (!ObjectUtils.isEmpty(request.getFirstname())) {
             userRepresentation.setFirstName(request.getFirstname());

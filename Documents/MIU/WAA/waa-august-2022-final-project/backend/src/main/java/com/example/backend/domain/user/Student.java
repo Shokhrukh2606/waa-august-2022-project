@@ -45,7 +45,15 @@ public class Student extends LocalUser {
             , inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "id", nullable = false)})
     private List<Tag> tags;
 
-    public Student(String email, String firstname, String lastname, String keyClockUserId) {
-        super(email, firstname, lastname, keyClockUserId);
+    public static Student createFromParent(LocalUser user){
+        var student = new Student();
+        student.setEmail(user.getEmail());
+        student.setFirstname(user.getFirstname());
+        student.setLastname(user.getLastname());
+        student.setKeyClockUserId(user.getKeyClockUserId());
+        student.setRole(user.getRole());
+        student.setFirebaseToken(user.getFirebaseToken());
+
+        return student;
     }
 }

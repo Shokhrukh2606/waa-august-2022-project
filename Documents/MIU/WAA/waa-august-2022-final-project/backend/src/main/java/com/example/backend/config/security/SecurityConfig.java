@@ -1,5 +1,7 @@
 package com.example.backend.config.security;
 
+import com.example.backend.property.FileStorageProperties;
+import com.example.backend.property.KeyCloakAdminProperties;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
@@ -42,6 +44,8 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Value("${app.cors.allowed-origins}")
     List<String> allowedOrigin;
 
+    private final KeyCloakAdminProperties properties;
+
     private static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"};
     private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/v2/api-docs/**", "/swagger.json",
             "/swagger-ui.html", "/webjars/**"};
@@ -51,6 +55,10 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
             "content-disposition", "dnt", "if-modified-since", "keep-alive", "origin", "user-agent", "x-requested-with"
     };
     private static final long MAX_AGE = 86400L;
+
+    public SecurityConfig(KeyCloakAdminProperties properties) {
+        this.properties = properties;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -97,12 +105,12 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Bean
     Keycloak Keycloak () {
         return KeycloakBuilder.builder()
-                .serverUrl("http://localhost:8180/auth")
+                .serverUrl(properties.getServerUrl())
                 .grantType(OAuth2Constants.PASSWORD)
-                .realm("master")
-                .username("admin")
-                .password("admin")
-                .clientId("admin-cli")
+                .realm(properties.getRealm())
+                .username(properties.getUsername())
+                .password(properties.getPassword())
+                .clientId(properties.getClientId())
                 .resteasyClient(
                         new ResteasyClientBuilder()
                                 .connectionPoolSize(10).build()

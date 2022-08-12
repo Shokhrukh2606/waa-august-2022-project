@@ -21,7 +21,15 @@ public class Faculty extends LocalUser {
     @Enumerated(value = EnumType.STRING)
     private Department department;
 
-    public Faculty(String email, String firstname, String lastname, String keyClockUserId) {
-        super(email, firstname, lastname, keyClockUserId);
+    public static Faculty createFromParent(LocalUser user){
+        var faculty = new Faculty();
+        faculty.setEmail(user.getEmail());
+        faculty.setFirstname(user.getFirstname());
+        faculty.setLastname(user.getLastname());
+        faculty.setKeyClockUserId(user.getKeyClockUserId());
+        faculty.setRole(user.getRole());
+        faculty.setFirebaseToken(user.getFirebaseToken());
+
+        return faculty;
     }
 }

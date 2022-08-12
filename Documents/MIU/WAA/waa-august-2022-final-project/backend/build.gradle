@@ -17,6 +17,7 @@ ext {
     swaggerVersion = "2.9.2"
     keycloakVersion = "19.0.1"
     mapstruct = "1.5.2.Final"
+    firebaseVersion = "9.0.0"
 }
 
 repositories {
@@ -46,7 +47,11 @@ dependencies {
     implementation group: 'org.keycloak.bom', name: 'keycloak-adapter-bom', version: "${keycloakVersion}", ext: 'pom'
 
     // https://mvnrepository.com/artifact/org.keycloak/keycloak-admin-client
-    implementation group: 'org.keycloak', name: 'keycloak-admin-client', version: '19.0.1'
+    implementation group: 'org.keycloak', name: 'keycloak-admin-client', version: "${keycloakVersion}"
+
+    // https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+    implementation group: 'com.google.firebase', name: 'firebase-admin', version: "${firebaseVersion}"
+
 
 
     implementation "org.mapstruct:mapstruct:${mapstruct}"
