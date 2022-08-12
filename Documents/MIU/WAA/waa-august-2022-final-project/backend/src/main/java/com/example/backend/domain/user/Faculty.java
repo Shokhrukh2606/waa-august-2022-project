@@ -27,7 +27,6 @@ public class Faculty extends LocalUser {
         faculty.setFirstname(user.getFirstname());
         faculty.setLastname(user.getLastname());
         faculty.setKeyClockUserId(user.getKeyClockUserId());
-        faculty.setRole(user.getRole());
         faculty.setFirebaseToken(user.getFirebaseToken());
 
         return faculty;

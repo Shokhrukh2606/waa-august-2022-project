@@ -53,7 +53,6 @@ public class Student extends LocalUser {
         student.setFirstname(user.getFirstname());
         student.setLastname(user.getLastname());
         student.setKeyClockUserId(user.getKeyClockUserId());
-        student.setRole(user.getRole());
         student.setFirebaseToken(user.getFirebaseToken());
 
         return student;

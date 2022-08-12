@@ -30,9 +30,6 @@ public class LocalUser extends AbstractEntity {
 
     private String keyClockUserId;
 
-    @Enumerated(value = EnumType.STRING)
-    private Role role;
-
     @Column(name = "updated", nullable = false, columnDefinition = "boolean default false")
     private boolean updated;
 

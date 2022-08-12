@@ -61,19 +61,18 @@ public class SecurityBean implements Security {
             throw new EntityExistsException(String.format("User with email: %s is already exist", newUser.getEmail()));
         }
 
-        newUser.setRole(request.getRole());
         newUser.setFirebaseToken(request.getFirebaseToken());
 
         LocalUser dbUser;
 
-        if (newUser.getRole() == Role.STUDENT) {
+        if (request.getRole() == Role.STUDENT) {
             dbUser = studentRepo.save(Student.createFromParent(newUser));
         } else {
             dbUser = facultyRepo.save(Faculty.createFromParent(newUser));
         }
 
         var userResource = keyCloakUtils.getUserResource(dbUser.getKeyClockUserId());
-        userResource.roles().realmLevel().add(keyCloakUtils.roleToRealmRoleRepresentation(dbUser.getRole()));
+        userResource.roles().realmLevel().add(keyCloakUtils.roleToRealmRoleRepresentation(request.getRole()));
         userResource.toRepresentation().setEnabled(false);
         return userMapper.toDto(dbUser);
     }

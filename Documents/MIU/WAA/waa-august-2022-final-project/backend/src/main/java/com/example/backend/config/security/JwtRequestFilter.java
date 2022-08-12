@@ -69,17 +69,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         return Arrays.stream(AUTH_WHITELIST)
-                .anyMatch(p -> {
-                    switch (p) {
-                        case "/api/users":
-                        case "/api/students":
-                        case "/api/faculties":
-                            return pathMatcher.match(p, request.getServletPath()) &&
-                                   (request.getMethod().equals(HttpMethod.POST.name()) ||
-                                    request.getMethod().equals(HttpMethod.PUT.name()));
-                        default:
-                            return pathMatcher.match(p, request.getServletPath());
-                    }
+                .anyMatch(p -> switch (p) {
+                    case "/api/users", "/api/students", "/api/faculties" -> pathMatcher.match(p, request.getServletPath()) &&
+                                                                            (request.getMethod().equals(HttpMethod.POST.name()) ||
+                                                                             request.getMethod().equals(HttpMethod.PUT.name()));
+                    default -> pathMatcher.match(p, request.getServletPath());
                 });
     }
 }
