@@ -22,6 +22,6 @@ public class JwtUtils {
         var lastName = token.getFamilyName();
         var keyClockUserId = principal.getName();
 
-        return new LocalUser(email, firstName, lastName, keyClockUserId, null, false);
+        return new LocalUser(email, firstName, lastName, keyClockUserId, null, false, null);
     }
 }
