@@ -1,5 +1,6 @@
 package com.example.backend.repo.user;
 
+import com.example.backend.domain.job.Tag;
 import com.example.backend.domain.user.Student;
 import com.example.backend.dto.chart.LocationCountEntity;
 import com.example.backend.repo.SoftDeleteJpaRepository;
@@ -23,4 +24,7 @@ public interface StudentRepo extends SoftDeleteJpaRepository<Student> {
                    + "         left join students s on c.id = s.city_id "
                    + "where c.state = :state group by c.name order by count desc", nativeQuery = true)
     List<LocationCountEntity> findStudentsByAllCities(String state);
+
+
+    List<Student> findAllByTags(List<Tag> tags);
 }

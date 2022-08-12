@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
@@ -25,6 +26,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity(name = "students")
 @Where(clause = "deleted=false")
+@ToString
 public class Student extends LocalUser {
 
     @Column(columnDefinition = "NUMERIC(5,2)")

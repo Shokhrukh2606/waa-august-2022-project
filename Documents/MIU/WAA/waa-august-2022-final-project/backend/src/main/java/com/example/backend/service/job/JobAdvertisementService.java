@@ -3,34 +3,35 @@ package com.example.backend.service.job;
 import com.example.backend.domain.job.JobAdvertisement;
 import com.example.backend.domain.job.Tag;
 import com.example.backend.domain.user.LocalUser;
-import com.example.backend.domain.user.LocalUser;
+import com.example.backend.domain.user.Student;
 import com.example.backend.dto.filter.JobAdvertisementSearch;
 import com.example.backend.dto.job.JobAdvertisementCreateRequestDto;
 import com.example.backend.dto.job.JobAdvertisementDto;
+import com.example.backend.dto.messaging.Note;
 import com.example.backend.exceptions.ErrorCode;
 import com.example.backend.exceptions.LocalizedApplicationException;
 import com.example.backend.mapper.JobAdvertisementMapper;
 import com.example.backend.repo.job.JobAdvertisementRepo;
 import com.example.backend.repo.job.TagRepo;
+import com.example.backend.repo.user.StudentRepo;
+import com.example.backend.service.messaging.FirebaseMessagingService;
 import com.example.backend.service.security.Security;
 import com.example.backend.utils.DaoUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,9 @@ public class JobAdvertisementService implements JobAdvertisements {
     private final JobAdvertisementMapper mapper;
     private final TagRepo tagRepo;
     private final Security security;
+
+    private final FirebaseMessagingService messagingService;
+    private final StudentRepo studentRepo;
 
     @Override
     public JobAdvertisementDto create(JobAdvertisementCreateRequestDto dto) {
@@ -67,7 +71,11 @@ public class JobAdvertisementService implements JobAdvertisements {
         advertisement.setTags(tags);
         advertisement.setCreator(security.getCurrentUser());
 
-        return mapper.toDto(repo.save(advertisement));
+        var result = repo.save(advertisement);
+
+        sendNotification(result);
+
+        return mapper.toDto(result);
     }
 
     @Override
@@ -140,5 +148,24 @@ public class JobAdvertisementService implements JobAdvertisements {
                 throw new AccessDeniedException(ErrorCode.FORBIDDEN + " Users can only delete their own advertisements");
             }
         }
+    }
+
+    @SneakyThrows
+    private void sendNotification(JobAdvertisement advertisement) {
+        var data = new HashMap<String, String>();
+        data.put("advertisement", new ObjectMapper().writeValueAsString(mapper.toDto(advertisement)));
+
+        var note = Note.builder()
+                .subject("A new job advertisement has been added")
+                .content("Hey do not waste your change to secure your job!")
+                .data(data)
+                .build();
+
+        messagingService.sendNotifications(note,
+                getStudentsByTags(advertisement.getTags()).stream().map(LocalUser::getFirebaseToken).collect(Collectors.toList()));
+    }
+
+    private List<Student> getStudentsByTags(List<Tag> tags) {
+        return studentRepo.findAllByTags(tags);
     }
 }
