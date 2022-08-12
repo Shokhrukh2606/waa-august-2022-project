@@ -7,5 +7,5 @@ public interface Faculties {
 
     FacultyDto updateProfile(FacultyUpdateRequest request);
 
-    FacultyDto getAuthorizedStudent();
+    FacultyDto getAuthorizedFaculty();
 }

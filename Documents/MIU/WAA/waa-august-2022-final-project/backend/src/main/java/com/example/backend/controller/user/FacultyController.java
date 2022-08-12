@@ -28,7 +28,7 @@ public class FacultyController {
     @PutMapping
     @ApiOperation(value = "Updating a faculty profile", response = FacultyDto.class)
     @PreAuthorize("hasRole('ROLE_FACULTY')")
-    public FacultyDto update(@Valid @RequestBody FacultyUpdateRequest request){
+    public FacultyDto update(@Valid @RequestBody FacultyUpdateRequest request) {
 
         log.info("Accessing PUT api/faculties {}", request);
 
@@ -41,7 +41,14 @@ public class FacultyController {
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('ROLE_FACULTY')")
-    public FacultyDto getAuthorizedStudent() {
-        return faculties.getAuthorizedStudent();
+    public FacultyDto getAuthorizedFaculty() {
+
+        log.info("Accessing GET api/faculties/me");
+
+        var result = faculties.getAuthorizedFaculty();
+
+        log.info("{} current authorized faculty was retrieved", result);
+
+        return result;
     }
 }

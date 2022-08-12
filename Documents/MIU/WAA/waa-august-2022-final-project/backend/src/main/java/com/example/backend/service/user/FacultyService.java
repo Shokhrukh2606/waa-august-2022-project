@@ -65,7 +65,7 @@ public class FacultyService implements Faculties {
     }
 
     @Override
-    public FacultyDto getAuthorizedStudent() {
+    public FacultyDto getAuthorizedFaculty() {
         return mapper.toDto(repo.findByEmail(security.getCurrentUser().getEmail()).orElseThrow(EntityNotFoundException::new));
     }
 }
