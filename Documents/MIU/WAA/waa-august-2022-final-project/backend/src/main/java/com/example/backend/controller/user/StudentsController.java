@@ -78,6 +78,13 @@ public class StudentsController {
     @GetMapping("/me")
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public StudentDto getAuthorizedStudent() {
-        return students.getAuthorizedStudent();
+
+        log.info("Accessing GET api/students/me");
+
+        var result = students.getAuthorizedStudent();
+
+        log.info("{} current authorized student was retrieved", result);
+
+        return result;
     }
 }

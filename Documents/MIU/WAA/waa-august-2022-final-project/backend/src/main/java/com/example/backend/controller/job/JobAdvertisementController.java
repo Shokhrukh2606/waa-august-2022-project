@@ -124,6 +124,13 @@ public class JobAdvertisementController {
     @GetMapping("/recently-applied")
     @PreAuthorize("hasAnyRole('ROLE_STUDENT','ROLE_FACULTY')")
     public List<JobAdvertisementDto> getRecentlyAppliedAds(){
-        return advertisements.getRecentlyAppliedAds();
+
+        log.info("Accessing GET api/advertisements/recently-applied");
+
+        var result = advertisements.getRecentlyAppliedAds();
+
+        log.info("{} recently applied job advertisements were retrieved", result);
+
+        return result;
     }
 }
