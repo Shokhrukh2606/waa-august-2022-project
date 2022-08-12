@@ -2,6 +2,7 @@ package com.example.backend.controller.user;
 
 import com.example.backend.dto.filter.StudentSearch;
 import com.example.backend.dto.user.CommentOnStudentDto;
+import com.example.backend.dto.user.FacultyDto;
 import com.example.backend.dto.user.StudentDto;
 import com.example.backend.dto.user.StudentUpdateRequest;
 import com.example.backend.service.user.CommentOnStudents;
@@ -76,6 +77,7 @@ public class StudentsController {
     }
 
     @GetMapping("/me")
+    @ApiOperation(value = "Getting an authorized student", response = StudentDto.class)
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     public StudentDto getAuthorizedStudent() {
 

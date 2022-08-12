@@ -40,6 +40,7 @@ public class FacultyController {
     }
 
     @GetMapping("/me")
+    @ApiOperation(value = "Getting an authorized faculty", response = FacultyDto.class)
     @PreAuthorize("hasRole('ROLE_FACULTY')")
     public FacultyDto getAuthorizedFaculty() {
 
