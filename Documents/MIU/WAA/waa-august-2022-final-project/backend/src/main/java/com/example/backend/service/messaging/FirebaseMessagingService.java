@@ -40,16 +40,4 @@ public class FirebaseMessagingService {
                         .putAllData(note.getData())
                         .build()).collect(Collectors.toList());
     }
-
-    @Bean
-    FirebaseMessaging firebaseMessaging() throws IOException {
-        GoogleCredentials googleCredentials = GoogleCredentials
-                .fromStream(new ClassPathResource("firebase-service-account.json").getInputStream());
-        FirebaseOptions firebaseOptions = FirebaseOptions
-                .builder()
-                .setCredentials(googleCredentials)
-                .build();
-        FirebaseApp app = FirebaseApp.initializeApp(firebaseOptions, "waa-final-project");
-        return FirebaseMessaging.getInstance(app);
-    }
 }

@@ -25,6 +25,9 @@ public interface StudentRepo extends SoftDeleteJpaRepository<Student> {
                    + "where c.state = :state group by c.name order by count desc", nativeQuery = true)
     List<LocationCountEntity> findStudentsByAllCities(String state);
 
-
+    @Query(value = "select * from students s "
+                   + "inner join student_tags st on s.id = st.student_id "
+                   + "inner join tags t on st.tag_id = t.id "
+                   + "where t.title in (:tags) ", nativeQuery = true)
     List<Student> findAllByTags(List<Tag> tags);
 }

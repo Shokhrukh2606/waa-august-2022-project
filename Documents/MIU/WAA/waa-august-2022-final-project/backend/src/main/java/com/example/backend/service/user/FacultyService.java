@@ -44,6 +44,8 @@ public class FacultyService implements Faculties {
             faculty.setEmail(request.getEmail());
         }
 
+        faculty.setUpdated(true);
+
         var userResource = keyCloakUtils.getUserResource(faculty.getKeyClockUserId());
         var userRepresentation = keyCloakUtils.getUserRepresentation(userResource);
 

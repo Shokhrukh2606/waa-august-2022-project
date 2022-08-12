@@ -63,6 +63,7 @@ public class StudentService implements Students {
         }
 
         student.setTags(tags);
+        student.setUpdated(true);
 
         var userResource = keyCloakUtils.getUserResource(student.getKeyClockUserId());
         var userRepresentation = keyCloakUtils.getUserRepresentation(userResource);

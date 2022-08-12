@@ -74,7 +74,7 @@ public class SecurityBean implements Security {
 
         var userResource = keyCloakUtils.getUserResource(dbUser.getKeyClockUserId());
         userResource.roles().realmLevel().add(keyCloakUtils.roleToRealmRoleRepresentation(dbUser.getRole()));
-
+        userResource.toRepresentation().setEnabled(false);
         return userMapper.toDto(dbUser);
     }
 
