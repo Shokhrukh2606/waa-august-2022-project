@@ -96,6 +96,7 @@ public class JobApplicantService implements JobApplicants {
         var note = Note.builder()
                 .content("A new user has applied to your job advertisement")
                 .data(data)
+                .link("http://localhost:3000/student/job-advertisements")
                 .build();
 
         messagingService.sendNotifications(note, List.of(student.getFirebaseToken()));

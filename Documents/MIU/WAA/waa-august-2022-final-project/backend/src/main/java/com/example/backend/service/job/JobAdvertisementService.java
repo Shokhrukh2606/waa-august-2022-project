@@ -167,6 +167,7 @@ public class JobAdvertisementService implements JobAdvertisements {
                 .subject("A new job advertisement has been added")
                 .content("Hey do not waste your change to secure your job!")
                 .data(data)
+                .link("http://localhost:3000/student/job-advertisements")
                 .build();
 
         messagingService.sendNotifications(note,
