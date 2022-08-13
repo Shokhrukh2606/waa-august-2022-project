@@ -1,5 +1,264 @@
-insert into cities(id, name, state) values(1, 'Alabaster', 'ALABAMA');
+drop table if exists job_files cascade;
+
+drop table if exists resource_files cascade;
+
+drop table if exists comments_on_students cascade;
+
+drop table if exists faculties cascade;
+
+drop table if exists job_applicants cascade;
+
+drop table if exists job_history_tags cascade;
+
+drop table if exists job_history cascade;
+
+drop table if exists job_tags cascade;
+
+drop table if exists job_advertisements cascade;
+
+drop table if exists student_tags cascade;
+
+drop table if exists students cascade;
+
+drop table if exists cities cascade;
+
+drop table if exists tags cascade;
+
+drop table if exists users cascade;
+
+create table cities
+(
+    id    integer not null
+        primary key,
+    name  varchar(255),
+    state varchar(255)
+);
+
+alter table cities
+    owner to postgres;
+
+create table users
+(
+    id                bigserial
+        primary key,
+    create_date       timestamp,
+    deleted           boolean default false not null,
+    email             varchar(255)          not null
+        constraint uk_6dotkott2kjsp8vw4d0m25fb7
+            unique,
+    firebase_token    varchar(255),
+    firstname         varchar(255),
+    key_clock_user_id varchar(255),
+    lastname          varchar(255),
+    updated           boolean default false not null,
+    created_by        bigint
+        constraint fkibk1e3kaxy5sfyeekp8hbhnim
+            references users
+);
+
+alter table users
+    owner to postgres;
+
+create table faculties
+(
+    department varchar(255),
+    id         bigint not null
+        primary key
+        constraint fk4kdlq0j7tmwpm8ordxcim6pjq
+            references users
+);
+
+alter table faculties
+    owner to postgres;
+
+create table job_advertisements
+(
+    id           bigserial
+        primary key,
+    create_date  timestamp,
+    deleted      boolean default false not null,
+    benefits     varchar(2048),
+    company_name varchar(255),
+    description  varchar(2048),
+    created_by   bigint
+        constraint fkteoumfa0mge0bp7bfh22n12kx
+            references users,
+    city_id      integer
+        constraint fkgnyxsalughgsumyjfb3bmr3jt
+            references cities
+);
+
+alter table job_advertisements
+    owner to postgres;
+
+create table resource_files
+(
+    id          bigserial
+        primary key,
+    create_date timestamp,
+    deleted     boolean default false not null,
+    mime_type   varchar(255),
+    file_name   varchar(255),
+    file_size   bigint,
+    url         varchar(255),
+    created_by  bigint
+        constraint fktovcaxiturbeaw298fyhyiv2o
+            references users
+);
+
+alter table resource_files
+    owner to postgres;
+
+create table job_files
+(
+    job_id  bigint not null
+        constraint fknsb4sef85mb3sfdgj5kyts5bn
+            references job_advertisements,
+    file_id bigint not null
+        constraint fkmopu47t8ckwrbbbw2380p5c6c
+            references resource_files
+);
+
+alter table job_files
+    owner to postgres;
+
+create table students
+(
+    cv_url  varchar(255),
+    gpa     numeric(5, 2),
+    major   varchar(255),
+    id      bigint not null
+        primary key
+        constraint fk7xqmtv7r2eb5axni3jm0a80su
+            references users,
+    city_id integer
+        constraint fk6f1gnpq4oosj61x2lj3dh7mf8
+            references cities
+);
+
+alter table students
+    owner to postgres;
+
+create table comments_on_students
+(
+    id          bigserial
+        primary key,
+    create_date timestamp,
+    deleted     boolean default false not null,
+    comment     text,
+    created_by  bigint
+        constraint fkg4lkbkph7okb867cwe1jok30i
+            references users,
+    faculty_id  bigint
+        constraint fkknrkqc6deai82ll5681us11lw
+            references faculties,
+    student_id  bigint
+        constraint fkfq8kbt8l6r0mk8s4fhp00nric
+            references students
+);
+
+alter table comments_on_students
+    owner to postgres;
+
+create table job_applicants
+(
+    id                   bigserial
+        primary key,
+    create_date          timestamp,
+    deleted              boolean default false not null,
+    created_by           bigint
+        constraint fkei4306g4immgt5julgekfqqtv
+            references users,
+    job_advertisement_id bigint
+        constraint fkmxe75tp0x6wy7faiacfr87uox
+            references job_advertisements,
+    student_id           bigint
+        constraint fkeftbliuiolghifgy9m6slec35
+            references students
+);
+
+alter table job_applicants
+    owner to postgres;
+
+create table job_history
+(
+    id              bigserial
+        primary key,
+    create_date     timestamp,
+    deleted         boolean default false not null,
+    comments        text,
+    company_name    varchar(255),
+    end_date        timestamp,
+    reason_to_leave text,
+    start_date      timestamp,
+    created_by      bigint
+        constraint fk8fdj8n7ln4u9aolxffomrepib
+            references users,
+    student_id      bigint                not null
+        constraint fki2sqfifxle7vsj78fv1t5tx6p
+            references students
+);
+
+alter table job_history
+    owner to postgres;
+
+create table tags
+(
+    id          bigserial
+        primary key,
+    create_date timestamp,
+    deleted     boolean default false not null,
+    title       varchar(255),
+    created_by  bigint
+        constraint fk3sh3rn8hrvjb08s6vu09bldt7
+            references users
+);
+
+alter table tags
+    owner to postgres;
+
+create table job_history_tags
+(
+    job_history_id bigint not null
+        constraint fksuh6v9d5y9s2lrs4f0f6vw3gq
+            references job_history,
+    tag_id         bigint not null
+        constraint fk8xdx27cddfrpcqtg0hm5u0lda
+            references tags
+);
+
+alter table job_history_tags
+    owner to postgres;
+
+create table job_tags
+(
+    job_id bigint not null
+        constraint fk12j6sgywqbbwij0c0lfue92gc
+            references job_advertisements,
+    tag_id bigint not null
+        constraint fk2cw3d43irph8rm9f0lees5jm9
+            references tags
+);
+
+alter table job_tags
+    owner to postgres;
+
+create table student_tags
+(
+    student_id bigint not null
+        constraint fk60vtcguqy8w6k5bmr5c60ywcy
+            references students,
+    tag_id     bigint not null
+        constraint fksmawggb71htlqiqmvme9ekhl6
+            references tags
+);
+
+alter table student_tags
+    owner to postgres;
+
+
 insert into cities(id, name, state) values(2, 'Albertville', 'ALABAMA');
+insert into cities(id, name, state) values(1, 'Alabaster', 'ALABAMA');
 insert into cities(id, name, state) values(3, 'Alexander City', 'ALABAMA');
 insert into cities(id, name, state) values(4, 'Andalusia', 'ALABAMA');
 insert into cities(id, name, state) values(5, 'Anniston', 'ALABAMA');
@@ -5976,3 +6235,43 @@ insert into cities(id, name, state) values(5975, 'Riverton', 'WYOMING');
 insert into cities(id, name, state) values(5976, 'Rock Springs', 'WYOMING');
 insert into cities(id, name, state) values(5977, 'Sheridan', 'WYOMING');
 
+
+insert into tags(id, create_date, deleted, title, created_by)
+VALUES(1, now(), false, 'Java', null);
+
+insert into tags(id, create_date, deleted, title, created_by)
+VALUES(2, now(), false, 'Go', null);
+
+insert into users(id, create_date, deleted, email, firebase_token, firstname, key_clock_user_id, lastname, updated, created_by)
+values (1, now(), false, 'student@gmail.com', null, 'Firstname', null, 'Lastname', true, null);
+
+insert into users(id, create_date, deleted, email, firebase_token, firstname, key_clock_user_id, lastname, updated, created_by)
+values (2, now(), false, 'faculty@gmail.com', null, 'John', null, 'Deo', true, null);
+
+insert into students(cv_url, gpa, major, id, city_id)
+values(null, 4.0, 'MSCS', 1, 2003);
+
+insert into faculties(department, id) values ('COMPUTER_SCIENCE', 2);
+
+insert into job_history(id, create_date, deleted, comments, company_name, end_date, reason_to_leave, start_date, created_by, student_id)
+VALUES (1, now(), false, 'Visa problems', 'Netflix', now(), 'Visa issues', now(), 1, 1);
+
+insert into job_history_tags(job_history_id, tag_id) VALUES (1,1);
+
+insert into student_tags(student_id, tag_id) VALUES (1, 1);
+insert into student_tags(student_id, tag_id) VALUES (1, 2);
+
+insert into job_advertisements(id, create_date, deleted, benefits, company_name, description, created_by, city_id)
+VALUES(1, now(), false, '401K', 'LinkedIn', 'Senior Java Engineer position', 1, 2003);
+
+insert into job_advertisements(id, create_date, deleted, benefits, company_name, description, created_by, city_id)
+VALUES(2, now(), false, '401K', 'Google', 'Senior Go Engineer position', 2, 654);
+
+insert into job_tags(job_id, tag_id) VALUES (1, 1);
+insert into job_tags(job_id, tag_id) VALUES (2, 2);
+
+insert into comments_on_students(id, create_date, deleted, comment, created_by, faculty_id, student_id)
+VALUES(1, now(), false, 'Good student', 2, 2, 1);
+
+insert into job_applicants(id, create_date, deleted, created_by, job_advertisement_id, student_id)
+VALUES(1, now(), false, 1, 1, 1);

@@ -20,8 +20,9 @@ spring:
       connectionTimeout: 120000
   jpa:
     show-sql: true
+    defer-datasource-initialization: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       jdbc:
         lob:
@@ -29,7 +30,9 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: true
-
+  sql:
+    init:
+      mode: always
   main:
     lazy-initialization: false
   jackson:
