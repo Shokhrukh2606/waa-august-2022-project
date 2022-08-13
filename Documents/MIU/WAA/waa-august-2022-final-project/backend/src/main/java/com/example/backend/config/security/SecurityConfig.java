@@ -48,7 +48,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     private static final String[] ALLOWED_METHODS = {"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"};
     private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/v2/api-docs/**", "/swagger.json",
-            "/swagger-ui.html", "/webjars/**"};
+            "/swagger-ui.html", "/webjars/**", "api/locations/**"};
 
     private static final String[] ALLOWED_HEADERS = {
             "accept", "cache-Control", "authorization", "content-type", "x-auth-token", "cookie", "set-cookie",

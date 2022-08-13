@@ -23,6 +23,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.Predicate;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -92,7 +93,11 @@ public class StudentService implements Students {
 
     @Override
     public Page<StudentDto> search(StudentSearch search) {
-        return repo.findAll((Specification<Student>) (root, query, cb) -> {
+        return repo.findAll(specificationForSearch(search), DaoUtils.toPaging(search)).map(mapper::toDto);
+    }
+
+    private Specification<Student> specificationForSearch(StudentSearch search){
+        return (root, query, cb) -> {
             var predicates = new ArrayList<Predicate>();
 
             if (!ObjectUtils.isEmpty(search.getId())) {
@@ -101,6 +106,15 @@ public class StudentService implements Students {
             if (!ObjectUtils.isEmpty(search.getCity())) {
                 predicates.add(cb.equal(root.get("city").get("name"), search.getCity()));
             }
+
+            if (!ObjectUtils.isEmpty(search.getTags())) {
+                var join = root.join("tags").get("title");
+                List<Predicate> pres = new ArrayList<>();
+                search.getTags().forEach(item -> pres.add(cb.equal(join, item)));
+                Predicate or = cb.or(pres.toArray(Predicate[]::new));
+                predicates.add(cb.and(or));
+            }
+
             if (!ObjectUtils.isEmpty(search.getState())) {
                 predicates.add(cb.equal(root.get("city").get("state"), search.getState().name()));
             }
@@ -116,6 +130,11 @@ public class StudentService implements Students {
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
-        }, DaoUtils.toPaging(search)).map(mapper::toDto);
+        };
+    }
+
+    @Override
+    public List<Student> findAll(StudentSearch search) {
+        return repo.findAll(specificationForSearch(search));
     }
 }

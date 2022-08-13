@@ -27,7 +27,6 @@ public class FacultyController {
 
     @PutMapping
     @ApiOperation(value = "Updating a faculty profile", response = FacultyDto.class)
-    @PreAuthorize("hasRole('ROLE_FACULTY')")
     public FacultyDto update(@Valid @RequestBody FacultyUpdateRequest request) {
 
         log.info("Accessing PUT api/faculties {}", request);

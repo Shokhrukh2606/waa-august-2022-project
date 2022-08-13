@@ -5,6 +5,7 @@ import com.example.backend.domain.job.Tag;
 import com.example.backend.domain.user.LocalUser;
 import com.example.backend.domain.user.Student;
 import com.example.backend.dto.filter.JobAdvertisementSearch;
+import com.example.backend.dto.filter.StudentSearch;
 import com.example.backend.dto.job.JobAdvertisementCreateRequestDto;
 import com.example.backend.dto.job.JobAdvertisementDto;
 import com.example.backend.dto.messaging.Note;
@@ -16,6 +17,7 @@ import com.example.backend.repo.job.TagRepo;
 import com.example.backend.repo.user.StudentRepo;
 import com.example.backend.service.messaging.FirebaseMessagingService;
 import com.example.backend.service.security.Security;
+import com.example.backend.service.user.Students;
 import com.example.backend.utils.DaoUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -46,7 +48,8 @@ public class JobAdvertisementService implements JobAdvertisements {
     private final Security security;
 
     private final FirebaseMessagingService messagingService;
-    private final StudentRepo studentRepo;
+
+    private final Students students;
 
     @Override
     public JobAdvertisementDto create(JobAdvertisementCreateRequestDto dto) {
@@ -162,10 +165,12 @@ public class JobAdvertisementService implements JobAdvertisements {
                 .build();
 
         messagingService.sendNotifications(note,
-                getStudentsByTags(advertisement.getTags()).stream().map(LocalUser::getFirebaseToken).collect(Collectors.toList()));
+                getStudentsByTags(advertisement.getTags()).stream().distinct().map(LocalUser::getFirebaseToken).collect(Collectors.toList()));
     }
 
     private List<Student> getStudentsByTags(List<Tag> tags) {
-        return studentRepo.findAllByTags(tags);
+        //return studentRepo.findAllByTags(tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
+        //return studentRepo.findAllByTags(tags);
+        return students.findAll(StudentSearch.builder().tags(tags.stream().map(Tag::getTitle).collect(Collectors.toList())).build());
     }
 }
