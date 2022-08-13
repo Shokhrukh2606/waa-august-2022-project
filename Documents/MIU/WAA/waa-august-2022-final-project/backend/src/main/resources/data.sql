@@ -6236,42 +6236,42 @@ insert into cities(id, name, state) values(5976, 'Rock Springs', 'WYOMING');
 insert into cities(id, name, state) values(5977, 'Sheridan', 'WYOMING');
 
 
-insert into tags(id, create_date, deleted, title, created_by)
-VALUES(1, now(), false, 'Java', null);
+insert into tags(create_date, deleted, title, created_by)
+VALUES(now(), false, 'Java', null);
 
-insert into tags(id, create_date, deleted, title, created_by)
-VALUES(2, now(), false, 'Go', null);
+insert into tags(create_date, deleted, title, created_by)
+VALUES(now(), false, 'Go', null);
 
-insert into users(id, create_date, deleted, email, firebase_token, firstname, key_clock_user_id, lastname, updated, created_by)
-values (1, now(), false, 'student@gmail.com', null, 'Firstname', null, 'Lastname', true, null);
+insert into users(create_date, deleted, email, firebase_token, firstname, key_clock_user_id, lastname, updated, created_by)
+values (now(), false, 'student@gmail.com', null, 'Firstname', null, 'Lastname', true, null);
 
-insert into users(id, create_date, deleted, email, firebase_token, firstname, key_clock_user_id, lastname, updated, created_by)
-values (2, now(), false, 'faculty@gmail.com', null, 'John', null, 'Deo', true, null);
+insert into users( create_date, deleted, email, firebase_token, firstname, key_clock_user_id, lastname, updated, created_by)
+values ( now(), false, 'faculty@gmail.com', null, 'John', null, 'Deo', true, null);
 
 insert into students(cv_url, gpa, major, id, city_id)
 values(null, 4.0, 'MSCS', 1, 2003);
 
 insert into faculties(department, id) values ('COMPUTER_SCIENCE', 2);
 
-insert into job_history(id, create_date, deleted, comments, company_name, end_date, reason_to_leave, start_date, created_by, student_id)
-VALUES (1, now(), false, 'Visa problems', 'Netflix', now(), 'Visa issues', now(), 1, 1);
+insert into job_history( create_date, deleted, comments, company_name, end_date, reason_to_leave, start_date, created_by, student_id)
+VALUES ( now(), false, 'Visa problems', 'Netflix', now(), 'Visa issues', now(), 1, 1);
 
 insert into job_history_tags(job_history_id, tag_id) VALUES (1,1);
 
 insert into student_tags(student_id, tag_id) VALUES (1, 1);
 insert into student_tags(student_id, tag_id) VALUES (1, 2);
 
-insert into job_advertisements(id, create_date, deleted, benefits, company_name, description, created_by, city_id)
-VALUES(1, now(), false, '401K', 'LinkedIn', 'Senior Java Engineer position', 1, 2003);
+insert into job_advertisements(create_date, deleted, benefits, company_name, description, created_by, city_id)
+VALUES(now(), false, '401K', 'LinkedIn', 'Senior Java Engineer position', 1, 2003);
 
-insert into job_advertisements(id, create_date, deleted, benefits, company_name, description, created_by, city_id)
-VALUES(2, now(), false, '401K', 'Google', 'Senior Go Engineer position', 2, 654);
+insert into job_advertisements( create_date, deleted, benefits, company_name, description, created_by, city_id)
+VALUES( now(), false, '401K', 'Google', 'Senior Go Engineer position', 2, 654);
 
 insert into job_tags(job_id, tag_id) VALUES (1, 1);
 insert into job_tags(job_id, tag_id) VALUES (2, 2);
 
-insert into comments_on_students(id, create_date, deleted, comment, created_by, faculty_id, student_id)
-VALUES(1, now(), false, 'Good student', 2, 2, 1);
+insert into comments_on_students( create_date, deleted, comment, created_by, faculty_id, student_id)
+VALUES( now(), false, 'Good student', 2, 2, 1);
 
-insert into job_applicants(id, create_date, deleted, created_by, job_advertisement_id, student_id)
-VALUES(1, now(), false, 1, 1, 1);
+insert into job_applicants( create_date, deleted, created_by, job_advertisement_id, student_id)
+VALUES( now(), false, 1, 1, 1);
