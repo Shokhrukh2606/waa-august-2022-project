@@ -4,6 +4,7 @@ import com.example.backend.domain.user.Faculty;
 import com.example.backend.domain.user.LocalUser;
 import com.example.backend.domain.user.Role;
 import com.example.backend.domain.user.Student;
+import com.example.backend.dto.messaging.PatchFirebaseTokenRequest;
 import com.example.backend.dto.user.LocalUserCreateRequest;
 import com.example.backend.dto.user.LocalUserDto;
 import com.example.backend.exceptions.ErrorCode;
@@ -75,6 +76,15 @@ public class SecurityBean implements Security {
         userResource.roles().realmLevel().add(keyCloakUtils.roleToRealmRoleRepresentation(request.getRole()));
         userResource.toRepresentation().setEnabled(false);
         return userMapper.toDto(dbUser);
+    }
+
+    @Override
+    public void saveFirebaseToken(PatchFirebaseTokenRequest request) {
+        LocalUser user = getCurrentUser();
+
+        user.setFirebaseToken(request.getToken());
+
+        userRepo.save(user);
     }
 
     public LocalUser loadUserByUsername(String username) throws UsernameNotFoundException {

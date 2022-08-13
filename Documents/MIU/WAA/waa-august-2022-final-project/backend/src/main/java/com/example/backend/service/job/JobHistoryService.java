@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityNotFoundException;
@@ -38,6 +39,7 @@ public class JobHistoryService implements JobHistories {
 
     private final StudentRepo studentRepo;
 
+    @Transactional
     @Override
     public JobHistoryDto create(JobHistoryCreateRequest request) {
         if (ObjectUtils.isEmpty(request.getCompanyName())) {
@@ -62,6 +64,7 @@ public class JobHistoryService implements JobHistories {
         return mapper.toDto(repo.save(history));
     }
 
+    @Transactional
     @Override
     public JobHistoryDto update(Long id, JobHistoryCreateRequest request) {
         LocalUser localUser = security.getCurrentUser();
@@ -88,6 +91,7 @@ public class JobHistoryService implements JobHistories {
         return mapper.toDto(repo.save(jobHistory));
     }
 
+    @Transactional
     @Override
     public void delete(Long id) {
         Optional<JobHistory> jobHistoryOptional = repo.findById(id);

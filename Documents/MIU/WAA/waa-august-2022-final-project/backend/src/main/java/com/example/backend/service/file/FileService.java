@@ -9,6 +9,7 @@ import com.example.backend.utils.BaseUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,6 +50,7 @@ public class FileService implements Files {
         }
     }
 
+    @Transactional
     @Override
     public ResourceFile storeFile(MultipartFile file) {
 
@@ -93,6 +95,7 @@ public class FileService implements Files {
         }
     }
 
+    @Transactional
     @Override
     public void removeFile(Long id) {
         try {

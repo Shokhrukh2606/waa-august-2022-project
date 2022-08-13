@@ -21,6 +21,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityExistsException;
@@ -47,6 +48,7 @@ public class JobApplicantService implements JobApplicants {
 
     private final FirebaseMessagingService messagingService;
 
+    @Transactional
     @Override
     public List<StudentDto> getAllByJobAdvertisementId(Long adId) {
         var advertisement = jobAdvertisementRepo.findById(adId)
@@ -60,7 +62,7 @@ public class JobApplicantService implements JobApplicants {
 
         return applicants.stream().map(JobApplicant::getStudent).map(studentMapper::toDtoWithCV).collect(Collectors.toList());
     }
-
+    @Transactional
     @Override
     public JobApplicantDto applyToJob(Long adId) {
         var advertisement = jobAdvertisementRepo.findById(adId)

@@ -17,6 +17,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityNotFoundException;
@@ -38,6 +39,7 @@ public class StudentService implements Students {
 
     private final KeyCloakUtils keyCloakUtils;
 
+    @Transactional
     @Override
     public StudentDto updateProfile(StudentUpdateRequest request) {
 

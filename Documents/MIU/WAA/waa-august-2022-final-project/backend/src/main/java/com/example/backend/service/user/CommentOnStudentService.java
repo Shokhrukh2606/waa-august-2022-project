@@ -11,6 +11,7 @@ import com.example.backend.service.security.Security;
 import lombok.AllArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -27,6 +28,7 @@ public class CommentOnStudentService implements CommentOnStudents {
     private final Security security;
     private final FacultyRepo facultyRepo;
 
+    @Transactional
     @Override
     public CommentOnStudentDto create(CommentOnStudentCreateRequest request) {
 

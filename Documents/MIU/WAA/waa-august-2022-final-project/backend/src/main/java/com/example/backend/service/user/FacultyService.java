@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityNotFoundException;
@@ -25,6 +26,7 @@ public class FacultyService implements Faculties {
 
     private final KeyCloakUtils keyCloakUtils;
 
+    @Transactional
     @Override
     public FacultyDto updateProfile(FacultyUpdateRequest request) {
 
