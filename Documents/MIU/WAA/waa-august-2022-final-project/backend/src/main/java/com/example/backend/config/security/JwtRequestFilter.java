@@ -1,9 +1,11 @@
 package com.example.backend.config.security;
 
+import com.example.backend.dto.ErrorDto;
 import com.example.backend.exceptions.ErrorCode;
 import com.example.backend.repo.user.UserRepo;
 import com.example.backend.service.security.Security;
 import com.example.backend.utils.JwtUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
@@ -19,7 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -43,8 +47,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             var user = security.getCurrentUser();
 
             if (!user.isUpdated()) {
-                response.setHeader("ErrorCode", ErrorCode.UPDATE_PROFILE_REQUIRED.name());
-                response.setStatus(400);
+                makeErrorBody(response, ErrorCode.UPDATE_PROFILE_REQUIRED);
             } else {
                 filterChain.doFilter(request, response);
             }
@@ -59,11 +62,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             var dbUser = userRepo.findFirstByEmail(authUser.getEmail());
 
             if (dbUser.isEmpty()) {
-                response.setHeader("ErrorCode", ErrorCode.CREATE_PROFILE_REQUIRED.name());
-
-                response.setStatus(400);
+                makeErrorBody(response, ErrorCode.CREATE_PROFILE_REQUIRED);
             }
         }
+    }
+
+    private void makeErrorBody(HttpServletResponse response, ErrorCode code) throws IOException {
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(new ObjectMapper().writeValueAsString(new ErrorDto(code.name(), List.of())));
+        out.flush();
+        response.setStatus(400);
     }
 
     @Override
