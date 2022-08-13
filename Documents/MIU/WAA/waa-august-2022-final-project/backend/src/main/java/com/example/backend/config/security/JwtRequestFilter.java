@@ -30,9 +30,10 @@ import java.util.List;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/v2/api-docs/**", "/swagger.json",
+    private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/v2/api-docs/**", "/swagger.json", "/webjars/springfox-swagger-ui/springfox.css",
             "/swagger-ui.html", "/webjars/**", "/api/resource/uploads/**", "/api/users", "/api/students", "/api/faculties",
-    "api/locations/states","api/locations/cities/filter" };
+            "/webjars/springfox-swagger-ui/swagger-ui-bundle.js", "/webjars/springfox-swagger-ui/springfox.js",
+            "api/locations/states", "api/locations/cities/filter"};
 
     private static final String CREATE_PROFILE_URL = "http://localhost:3000/users/create";
     private static final String UPDATE_PROFILE_URL = "http://localhost:3000/users/update";
@@ -69,8 +70,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     private void makeErrorBody(HttpServletResponse response, ErrorCode code) throws IOException {
-        PrintWriter out = response.getWriter();
         response.setStatus(400);
+        PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         out.print(new ObjectMapper().writeValueAsString(new ErrorDto(code.name(), List.of())));
