@@ -33,7 +33,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String[] AUTH_WHITELIST = {"/swagger-resources/**", "/v2/api-docs/**", "/swagger.json", "/webjars/springfox-swagger-ui/springfox.css",
             "/swagger-ui.html", "/webjars/**", "/api/resource/uploads/**", "/api/users", "/api/students", "/api/faculties",
             "/webjars/springfox-swagger-ui/swagger-ui-bundle.js", "/webjars/springfox-swagger-ui/springfox.js",
-            "api/locations/states", "api/locations/cities/filter"};
+            "/api/locations/states", "/api/locations/cities/filter"};
 
     private static final String CREATE_PROFILE_URL = "http://localhost:3000/users/create";
     private static final String UPDATE_PROFILE_URL = "http://localhost:3000/users/update";
