@@ -89,6 +89,7 @@ public class JobApplicantService implements JobApplicants {
         var data = new HashMap<String, String>();
         data.put("student", new ObjectMapper().writeValueAsString(studentMapper.toDto(student)));
         data.put("advertisement", new ObjectMapper().writeValueAsString(advertisementMapper.toDto(advertisement)));
+        data.put("type", "appliedToJob");
 
         var note = Note.builder()
                 .content("A new user has applied to your job advertisement")

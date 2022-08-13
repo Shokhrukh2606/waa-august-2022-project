@@ -156,6 +156,7 @@ public class JobAdvertisementService implements JobAdvertisements {
     @SneakyThrows
     private void sendNotification(JobAdvertisement advertisement) {
         var data = new HashMap<String, String>();
+        data.put("type", "jobAdvertisementCreated");
         data.put("advertisement", new ObjectMapper().writeValueAsString(mapper.toDto(advertisement)));
 
         var note = Note.builder()
