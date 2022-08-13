@@ -10,12 +10,14 @@ import com.example.backend.repo.job.TagRepo;
 import com.example.backend.repo.user.StudentRepo;
 import com.example.backend.service.security.Security;
 import com.example.backend.utils.DaoUtils;
+import com.example.backend.utils.JwtUtils;
 import com.example.backend.utils.KeyCloakUtils;
 import lombok.AllArgsConstructor;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -47,7 +49,7 @@ public class StudentService implements Students {
         var tags = tagRepo.findAllByTitleIsIn(request.getTags());
 
         Student student = repo.findByEmail(security.getCurrentUser().getEmail()).orElseThrow(EntityNotFoundException::new);
-
+        student.setKeyClockUserId(JwtUtils.getUserFromToken(SecurityContextHolder.getContext().getAuthentication()).getKeyClockUserId());
         student.setCity(request.getCity());
         student.setGpa(request.getGpa());
         student.setMajor(request.getMajor());

@@ -1,7 +1,6 @@
 package com.example.backend.config.security;
 
 import com.example.backend.exceptions.ErrorCode;
-import com.example.backend.exceptions.LocalizedApplicationException;
 import com.example.backend.repo.user.UserRepo;
 import com.example.backend.service.security.Security;
 import com.example.backend.utils.JwtUtils;
@@ -44,7 +43,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             var user = security.getCurrentUser();
 
             if (!user.isUpdated()) {
-                throw new LocalizedApplicationException(ErrorCode.UPDATE_PROFILE_REQUIRED);
+                response.setHeader("ErrorCode", ErrorCode.UPDATE_PROFILE_REQUIRED.name());
+                response.setStatus(400);
             } else {
                 filterChain.doFilter(request, response);
             }
@@ -59,7 +59,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             var dbUser = userRepo.findFirstByEmail(authUser.getEmail());
 
             if (dbUser.isEmpty()) {
-                throw new LocalizedApplicationException(ErrorCode.CREATE_PROFILE_REQUIRED);
+                response.setHeader("ErrorCode", ErrorCode.CREATE_PROFILE_REQUIRED.name());
+
+                response.setStatus(400);
             }
         }
     }

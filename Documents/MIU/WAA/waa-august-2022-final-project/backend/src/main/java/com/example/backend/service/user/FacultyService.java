@@ -6,10 +6,12 @@ import com.example.backend.dto.user.FacultyUpdateRequest;
 import com.example.backend.mapper.FacultyMapper;
 import com.example.backend.repo.user.FacultyRepo;
 import com.example.backend.service.security.Security;
+import com.example.backend.utils.JwtUtils;
 import com.example.backend.utils.KeyCloakUtils;
 import lombok.AllArgsConstructor;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -31,7 +33,7 @@ public class FacultyService implements Faculties {
     public FacultyDto updateProfile(FacultyUpdateRequest request) {
 
         Faculty faculty = repo.findByEmail(security.getCurrentUser().getEmail()).orElseThrow(EntityNotFoundException::new);
-
+        faculty.setKeyClockUserId(JwtUtils.getUserFromToken(SecurityContextHolder.getContext().getAuthentication()).getKeyClockUserId());
         faculty.setDepartment(request.getDepartment());
 
         if (!ObjectUtils.isEmpty(request.getFirstname())) {
